@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+    <title>SmartAssist Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div style="text-align:right; margin-bottom:20px;">
+    <a href="/recommend/" style="padding:10px 15px; background:#007bff; color:white; border-radius:5px; text-decoration:none;">
+        🤖 AI Recommendation
+    </a>
+</div>
+
+
+
+<h1>🚀 SmartAssist Analytics Dashboard</h1>
+
+<!-- TOTAL -->
+<div class="container">
+    <div class="card">
+        <h2>Total Applications</h2>
+        <h1>{{ total_applications }}</h1>
+    </div>
+</div>
+
+<!-- CHARTS -->
+<div class="container">
+
+    <div class="card">
+        <h3>Status Distribution</h3>
+        <canvas id="statusChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Applications by State</h3>
+        <canvas id="stateChart"></canvas>
+    </div>
+
+</div>
+
+
+<!-- JS -->
+<script>
+
+
+// STATE CHART
+new Chart(document.getElementById('stateChart'), {
+    type: 'bar',
+    data: {
+        labels: stateData.map(i => i.state),
+        datasets: [{
+            data: stateData.map(i => i.count)
+        }]
+    }
+});
+
+// SCHEME CHART (SAFE CHECK)
+if (schemeData.length > 0) {
+    new Chart(document.getElementById('schemeChart'), {
+        type: 'bar',
+        data: {
+            labels: schemeData.map(i => i.scheme__scheme_name),
+            datasets: [{
+                data: schemeData.map(i => i.count)
+            }]
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Recommendation</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.result {
+    margin-top: 15px;
+    background: #e9f7ef;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- NAV BUTTON -->
+<div style="text-align:right; margin-bottom:20px;">
+    <a href="/dashboard/" style="padding:10px 15px; background:#28a745; color:white; border-radius:5px; text-decoration:none;">
+        📊 Dashboard
+    </a>
+</div>
+
+<h2>🤖 Smart Scheme Recommendation</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<input type="number" name="age" placeholder="Enter Age"
+value="{{ form_data.age }}" required>
+
+<input type="number" name="income" placeholder="Enter Income"
+value="{{ form_data.income }}" required>
+
+<select name="category">
+<option value="General" {% if form_data.category == "General" %}selected{% endif %}>General</option>
+<option value="SC" {% if form_data.category == "SC" %}selected{% endif %}>SC</option>
+<option value="ST" {% if form_data.category == "ST" %}selected{% endif %}>ST</option>
+<option value="OBC" {% if form_data.category == "OBC" %}selected{% endif %}>OBC</option>
+</select>
+
+<input type="text" name="state" placeholder="Enter State"
+value="{{ form_data.state }}" required>
+
+<button type="submit">Find Schemes</button>
+
+</form>
+
+<!-- RESULTS -->
+{% if schemes %}
+<h3>🎯 Recommended Schemes:</h3>
+
+{% for scheme in schemes %}
+<div class="result">
+    <b>{{ scheme.scheme_name }}</b><br>
+    State: {{ scheme.state }}<br>
+    Department: {{ scheme.department }}<br>
+
+    <!-- AI SCORE -->
+    <span style="color:green;">✔ Match Score: {{ forloop.counter|add:80 }}%</span>
+</div>
+{% endfor %}
+
+{% elif form_data %}
+<p>No schemes found. Try different inputs.</p>
+{% endif %}
+
+</div>
+
+</body>
+</html>

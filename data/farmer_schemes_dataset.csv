@@ -1,0 +1,189 @@
+id,scheme_name,scheme_type,state,department
+1,PM Kisan Samman Nidhi,Central,India,Agriculture
+2,PM Fasal Bima Yojana,Central,India,Agriculture
+3,Soil Health Card Scheme,Central,India,Agriculture
+4,Kisan Credit Card,Central,India,Banking
+5,PM Krishi Sinchai Yojana,Central,India,Irrigation
+6,National Food Security Mission,Central,India,Agriculture
+7,Rashtriya Krishi Vikas Yojana,Central,India,Agriculture
+8,Paramparagat Krishi Vikas Yojana,Central,India,Organic
+9,National Mission on Sustainable Agriculture,Central,India,Agriculture
+10,Sub Mission on Agricultural Mechanisation,Central,India,Agriculture
+11,National Horticulture Mission,Central,India,Horticulture
+12,e-NAM National Agriculture Market,Central,India,Agriculture
+13,PM Matsya Sampada Yojana,Central,India,Fisheries
+14,Blue Revolution,Central,India,Fisheries
+15,Dairy Entrepreneurship Development Scheme,Central,India,Dairy
+16,National Livestock Mission,Central,India,Animal Husbandry
+17,Interest Subvention Scheme,Central,India,Banking
+18,PM Kisan Maandhan Yojana,Central,India,Agriculture
+19,Mission Organic Value Chain Development,Central,India,Organic
+20,Agriculture Infrastructure Fund,Central,India,Agriculture
+
+21,YSR Rythu Bharosa,State,Andhra Pradesh,Agriculture
+22,YSR Crop Insurance Scheme,State,Andhra Pradesh,Agriculture
+23,YSR Zero Interest Crop Loan,State,Andhra Pradesh,Agriculture
+24,Jagananna Bhoomi Rakshana Scheme,State,Andhra Pradesh,Land
+25,AP Farm Mechanisation Scheme,State,Andhra Pradesh,Agriculture
+
+26,Rythu Bandhu Scheme,State,Telangana,Agriculture
+27,Rythu Bima Scheme,State,Telangana,Agriculture
+28,Telangana Crop Loan Waiver,State,Telangana,Agriculture
+29,Telangana Farm Mechanisation Scheme,State,Telangana,Agriculture
+30,Telangana Seed Subsidy Scheme,State,Telangana,Agriculture
+
+31,Krishi Bhagya Scheme,State,Karnataka,Agriculture
+32,Raitha Siri Scheme,State,Karnataka,Agriculture
+33,Raitha Vidya Nidhi,State,Karnataka,Education
+34,Karnataka Millet Mission,State,Karnataka,Agriculture
+35,Karnataka Organic Farming Policy,State,Karnataka,Agriculture
+
+36,Baliraja Chetna Scheme,State,Maharashtra,Agriculture
+37,Mahatma Jyotiba Phule Shetkari Karj Mukti Yojana,State,Maharashtra,Agriculture
+38,Magel Tyala Shettale Scheme,State,Maharashtra,Irrigation
+39,Chief Minister Solar Pump Scheme,State,Maharashtra,Energy
+40,Maharashtra Farm Mechanisation Scheme,State,Maharashtra,Agriculture
+
+41,Kisan Suryoday Yojana,State,Gujarat,Energy
+42,Mukhyamantri Bagayat Yojana,State,Gujarat,Horticulture
+43,Gujarat Soil Health Card Program,State,Gujarat,Agriculture
+44,Gujarat Micro Irrigation Scheme,State,Gujarat,Irrigation
+45,Gujarat Farm Mechanisation Scheme,State,Gujarat,Agriculture
+
+46,Amma Farm Mechanisation Scheme,State,Tamil Nadu,Agriculture
+47,Uzhavar Sandhai Scheme,State,Tamil Nadu,Agriculture
+48,Tamil Nadu Crop Insurance Scheme,State,Tamil Nadu,Agriculture
+49,CM Solar Pump Scheme TN,State,Tamil Nadu,Energy
+50,Tamil Nadu Seed Subsidy Scheme,State,Tamil Nadu,Agriculture
+
+51,Crop Diversification Programme,State,Punjab,Agriculture
+52,Pani Bachao Paisa Kamao,State,Punjab,Irrigation
+53,Punjab Farm Mechanisation Scheme,State,Punjab,Agriculture
+54,Punjab Organic Farming Scheme,State,Punjab,Agriculture
+55,Punjab Seed Distribution Scheme,State,Punjab,Agriculture
+
+56,Mukhyamantri Krishak Saathi Yojana,State,Rajasthan,Agriculture
+57,Rajasthan Farm Loan Waiver,State,Rajasthan,Agriculture
+58,Rajasthan Solar Pump Scheme,State,Rajasthan,Energy
+59,Rajasthan Drip Irrigation Subsidy,State,Rajasthan,Irrigation
+60,Rajasthan Seed Subsidy Scheme,State,Rajasthan,Agriculture
+
+61,Mukhyamantri Krishak Durghatna Kalyan,State,Uttar Pradesh,Agriculture
+62,UP Crop Loan Waiver Scheme,State,Uttar Pradesh,Agriculture
+63,UP Solar Pump Scheme,State,Uttar Pradesh,Energy
+64,UP Irrigation Subsidy Scheme,State,Uttar Pradesh,Irrigation
+65,UP Seed Distribution Scheme,State,Uttar Pradesh,Agriculture
+
+66,Bhavantar Bhugtan Yojana,State,Madhya Pradesh,Agriculture
+67,MP Solar Pump Scheme,State,Madhya Pradesh,Energy
+68,MP Farm Mechanisation Scheme,State,Madhya Pradesh,Agriculture
+69,MP Seed Subsidy Scheme,State,Madhya Pradesh,Agriculture
+70,MP Irrigation Support Scheme,State,Madhya Pradesh,Irrigation
+
+71,Krishak Bandhu Scheme,State,West Bengal,Agriculture
+72,Bangla Shasya Bima Yojana,State,West Bengal,Agriculture
+73,WB Farm Mechanisation Scheme,State,West Bengal,Agriculture
+74,WB Seed Distribution Scheme,State,West Bengal,Agriculture
+75,WB Irrigation Support Scheme,State,West Bengal,Irrigation
+
+76,Bihar Diesel Subsidy Scheme,State,Bihar,Agriculture
+77,Bihar Crop Assistance Scheme,State,Bihar,Agriculture
+78,Bihar Farm Mechanisation Scheme,State,Bihar,Agriculture
+79,Bihar Seed Distribution Scheme,State,Bihar,Agriculture
+80,Bihar Irrigation Support Scheme,State,Bihar,Irrigation
+
+81,KALIA Scheme,State,Odisha,Agriculture
+82,Odisha Farm Mechanisation Scheme,State,Odisha,Agriculture
+83,Odisha Seed Subsidy Scheme,State,Odisha,Agriculture
+84,Odisha Irrigation Support Scheme,State,Odisha,Irrigation
+85,Odisha Organic Farming Initiative,State,Odisha,Agriculture
+
+86,Rajiv Gandhi Kisan Nyay Yojana,State,Chhattisgarh,Agriculture
+87,CG Farm Mechanisation Scheme,State,Chhattisgarh,Agriculture
+88,CG Seed Subsidy Scheme,State,Chhattisgarh,Agriculture
+89,CG Irrigation Support Scheme,State,Chhattisgarh,Irrigation
+90,CG Organic Farming Scheme,State,Chhattisgarh,Agriculture
+
+91,Meri Fasal Mera Byora,State,Haryana,Agriculture
+92,Haryana Solar Pump Scheme,State,Haryana,Energy
+93,Haryana Farm Mechanisation Scheme,State,Haryana,Agriculture
+94,Haryana Seed Subsidy Scheme,State,Haryana,Agriculture
+95,Haryana Crop Diversification Scheme,State,Haryana,Agriculture
+
+96,Karshaka Kshema Pension Scheme,State,Kerala,Agriculture
+97,Kerala Organic Farming Mission,State,Kerala,Agriculture
+98,Kerala Farm Mechanisation Scheme,State,Kerala,Agriculture
+99,Kerala Seed Subsidy Scheme,State,Kerala,Agriculture
+100,Kerala Irrigation Support Scheme,State,Kerala,Irrigation
+
+101,Samagra Gramya Unnayan Yojana,State,Assam,Agriculture
+102,Assam Farm Mechanisation Scheme,State,Assam,Agriculture
+103,Assam Seed Subsidy Scheme,State,Assam,Agriculture
+104,Assam Irrigation Support Scheme,State,Assam,Irrigation
+105,Assam Organic Farming Initiative,State,Assam,Agriculture
+
+106,Birsa Harit Gram Yojana,State,Jharkhand,Agriculture
+107,Jharkhand Farm Mechanisation Scheme,State,Jharkhand,Agriculture
+108,Jharkhand Seed Subsidy Scheme,State,Jharkhand,Agriculture
+109,Jharkhand Irrigation Support Scheme,State,Jharkhand,Irrigation
+110,Jharkhand Organic Farming Scheme,State,Jharkhand,Agriculture
+
+111,Mukhyamantri Krishi Vikas Yojana,State,Uttarakhand,Agriculture
+112,Uttarakhand Farm Mechanisation Scheme,State,Uttarakhand,Agriculture
+113,Uttarakhand Seed Subsidy Scheme,State,Uttarakhand,Agriculture
+114,Uttarakhand Irrigation Support Scheme,State,Uttarakhand,Irrigation
+115,Uttarakhand Organic Farming Scheme,State,Uttarakhand,Agriculture
+
+116,HP Natural Farming Scheme,State,Himachal Pradesh,Agriculture
+117,HP Farm Mechanisation Scheme,State,Himachal Pradesh,Agriculture
+118,HP Seed Subsidy Scheme,State,Himachal Pradesh,Agriculture
+119,HP Irrigation Support Scheme,State,Himachal Pradesh,Irrigation
+120,HP Organic Farming Scheme,State,Himachal Pradesh,Agriculture
+
+121,Goa Krishi Card Scheme,State,Goa,Agriculture
+122,Goa Farm Mechanisation Scheme,State,Goa,Agriculture
+123,Goa Seed Subsidy Scheme,State,Goa,Agriculture
+124,Goa Irrigation Support Scheme,State,Goa,Irrigation
+125,Goa Organic Farming Initiative,State,Goa,Agriculture
+
+126,Sikkim Organic Mission,State,Sikkim,Agriculture
+127,Sikkim Farm Mechanisation Scheme,State,Sikkim,Agriculture
+128,Sikkim Seed Subsidy Scheme,State,Sikkim,Agriculture
+129,Sikkim Irrigation Support Scheme,State,Sikkim,Irrigation
+130,Sikkim Organic Farming Expansion,State,Sikkim,Agriculture
+
+131,CM Krishak Kalyan Scheme,State,Tripura,Agriculture
+132,Tripura Farm Mechanisation Scheme,State,Tripura,Agriculture
+133,Tripura Seed Subsidy Scheme,State,Tripura,Agriculture
+134,Tripura Irrigation Support Scheme,State,Tripura,Irrigation
+135,Tripura Organic Farming Initiative,State,Tripura,Agriculture
+
+136,Organic Mission Manipur,State,Manipur,Agriculture
+137,Manipur Farm Mechanisation Scheme,State,Manipur,Agriculture
+138,Manipur Seed Subsidy Scheme,State,Manipur,Agriculture
+139,Manipur Irrigation Support Scheme,State,Manipur,Irrigation
+140,Manipur Organic Farming Initiative,State,Manipur,Agriculture
+
+141,CM Agriculture Development Scheme,State,Meghalaya,Agriculture
+142,Meghalaya Farm Mechanisation Scheme,State,Meghalaya,Agriculture
+143,Meghalaya Seed Subsidy Scheme,State,Meghalaya,Agriculture
+144,Meghalaya Irrigation Support Scheme,State,Meghalaya,Irrigation
+145,Meghalaya Organic Farming Initiative,State,Meghalaya,Agriculture
+
+146,New Land Use Policy,State,Mizoram,Agriculture
+147,Mizoram Farm Mechanisation Scheme,State,Mizoram,Agriculture
+148,Mizoram Seed Subsidy Scheme,State,Mizoram,Agriculture
+149,Mizoram Irrigation Support Scheme,State,Mizoram,Irrigation
+150,Mizoram Organic Farming Initiative,State,Mizoram,Agriculture
+
+151,Mission Organic Value Chain Nagaland,State,Nagaland,Agriculture
+152,Nagaland Farm Mechanisation Scheme,State,Nagaland,Agriculture
+153,Nagaland Seed Subsidy Scheme,State,Nagaland,Agriculture
+154,Nagaland Irrigation Support Scheme,State,Nagaland,Irrigation
+155,Nagaland Organic Farming Initiative,State,Nagaland,Agriculture
+
+156,CM Agriculture Mechanisation Scheme,State,Arunachal Pradesh,Agriculture
+157,CM Krishi Rinn Yojana,State,Arunachal Pradesh,Agriculture
+158,CM Shasakt Kisan Yojana,State,Arunachal Pradesh,Agriculture
+159,CM Krishi Samuh Yojana,State,Arunachal Pradesh,Agriculture
+160,Arunachal Seed Distribution Scheme,State,Arunachal Pradesh,Agriculture
