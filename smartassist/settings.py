@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -104,16 +105,66 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = [
+    ('en', 'English'),
+    ('hi', 'Hindi'),
+    ('mr', 'Marathi'),
+    ('gu', 'Gujarati'),
+    ('bn', 'Bengali'),
+    ('ta', 'Tamil'),
+    ('te', 'Telugu'),
+    ('kn', 'Kannada'),
+    ('ml', 'Malayalam'),
+    ('pa', 'Punjabi'),
+    ('ur', 'Urdu'),
+    ('or', 'Odia'),
+    ('as', 'Assamese'),
+    ('sa', 'Sanskrit'),
+    ('kok', 'Konkani'),
+    ('mni', 'Manipuri'),
+    ('ne', 'Nepali'),
+    ('sd', 'Sindhi'),
+    ('bodo', 'Bodo'),
+    ('sat', 'Santhali'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 USE_I18N = True
 
-USE_TZ = True
+USE_L10N = True
+
+TIME_ZONE = 'Asia/Kolkata'
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
+
+
+
+# Email settings for notifications
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'  # Replace with your Gmail
+EMAIL_HOST_PASSWORD = 'your-app-password'  # Replace with Gmail app password
+DEFAULT_FROM_EMAIL = 'SmartAssist <your-email@gmail.com>'
+
+# For development, you can use console backend:
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # Use environment variable for security

@@ -1,60 +1,89 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Recommendation</title>
+<title>SmartAssist AI Recommendation</title>
 
 <style>
 body {
-    font-family: Arial;
-    background: #f4f6f9;
-    padding: 20px;
+    font-family: 'Segoe UI';
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin: 0;
 }
 
+/* MAIN CARD */
 .container {
-    max-width: 600px;
-    margin: auto;
+    max-width: 700px;
+    margin: 40px auto;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
+/* INPUTS */
 input, select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
+/* BUTTON */
 button {
-    background: #007bff;
+    background: #667eea;
     color: white;
-    padding: 10px;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
-    width: 100%;
     cursor: pointer;
 }
 
 button:hover {
-    background: #0056b3;
+    background: #5a67d8;
 }
 
+/* RESULT CARD */
 .result {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 10px;
     margin-top: 15px;
-    background: #e9f7ef;
-    padding: 10px;
-    border-radius: 5px;
+    border-left: 5px solid #667eea;
 }
-</style>
 
+/* CHATBOT */
+.chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.chat-header {
+    background: #667eea;
+    color: white;
+    padding: 10px;
+}
+
+.chatbox {
+    height: 200px;
+    overflow: auto;
+    padding: 10px;
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-<!-- NAV BUTTON -->
 <div style="text-align:right; margin-bottom:20px;">
-    <a href="/dashboard/" style="padding:10px 15px; background:#28a745; color:white; border-radius:5px; text-decoration:none;">
+    <a href="/dashboard/" style="padding:10px 15px; background:#28a745; color:white; border-radius:5px;">
         📊 Dashboard
     </a>
 </div>
@@ -64,46 +93,177 @@ button:hover {
 <form method="POST">
 {% csrf_token %}
 
-<input type="number" name="age" placeholder="Enter Age"
-value="{{ form_data.age }}" required>
-
-<input type="number" name="income" placeholder="Enter Income"
-value="{{ form_data.income }}" required>
+<input type="number" name="age" placeholder="Enter Age" required>
+<input type="number" name="income" placeholder="Enter Income" required>
 
 <select name="category">
-<option value="General" {% if form_data.category == "General" %}selected{% endif %}>General</option>
-<option value="SC" {% if form_data.category == "SC" %}selected{% endif %}>SC</option>
-<option value="ST" {% if form_data.category == "ST" %}selected{% endif %}>ST</option>
-<option value="OBC" {% if form_data.category == "OBC" %}selected{% endif %}>OBC</option>
+<option>General</option>
+<option>SC</option>
+<option>ST</option>
+<option>OBC</option>
 </select>
 
-<input type="text" name="state" placeholder="Enter State"
-value="{{ form_data.state }}" required>
+<input type="text" name="state" placeholder="Enter State" required>
 
 <button type="submit">Find Schemes</button>
 
 </form>
 
-<!-- RESULTS -->
 {% if schemes %}
 <h3>🎯 Recommended Schemes:</h3>
 
-{% for scheme in schemes %}
-<div class="result">
-    <b>{{ scheme.scheme_name }}</b><br>
-    State: {{ scheme.state }}<br>
-    Department: {{ scheme.department }}<br>
+{% for item in schemes %}
+<div class="result" style="border-left: 5px solid #28a745; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
 
-    <!-- AI SCORE -->
-    <span style="color:green;">✔ Match Score: {{ forloop.counter|add:80 }}%</span>
+    <h4 style="margin-bottom: 8px; color:#1a365d;">{{ item.scheme.scheme_name }}</h4>
+    <small style="display:block; color:#6c757d; margin-bottom: 6px;">{{ item.scheme.state }} • {{ item.scheme.department }} • {{ item.scheme.scheme_type }}</small>
+
+    <p><strong>Description:</strong> {{ item.scheme.description|default:'No description available.' }}</p>
+    <p><strong>Eligibility:</strong> {{ item.scheme.eligibility|default:'Not specified' }}</p>
+    <p><strong>Documents:</strong> {{ item.scheme.documents_required|default:'Not specified' }}</p>
+
+    <p style="margin-top: 10px;"><strong>Match Score:</strong> <span style="color:#28a745;">{{ item.score }}%</span></p>
+
+    <div style="display:flex; gap: 10px; flex-wrap:wrap;">
+        {% if item.apply_url %}
+            <a href="{{ item.apply_url }}" target="_blank" rel="noopener" style="background:#007bff; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">Apply Now</a>
+        {% else %}
+            <span style="color:#dc3545; font-weight:600;">Apply link unavailable</span>
+        {% endif %}
+
+        {% if item.official_url %}
+            <a href="{{ item.official_url }}" target="_blank" rel="noopener" style="background:#17a2b8; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">Official Website</a>
+        {% else %}
+            <span style="color:#ffc107; font-weight:600;">Official website unavailable</span>
+        {% endif %}
+
+    </div>
+
 </div>
 {% endfor %}
 
-{% elif form_data %}
-<p>No schemes found. Try different inputs.</p>
 {% endif %}
 
 </div>
+
+<!-- 🎤 VOICE -->
+<button id="speakButton" onclick="startVoice()" style="background:orange; width:100%;">
+🎤 Speak Input
+</button>
+
+<!-- 🤖 CHATBOT -->
+<div class="chatbot">
+
+<div class="chat-header">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<span>🤖 SmartAssist Bot</span>
+<select id="chatMode" style="background:white; color:#333; border:none; padding:3px 8px; border-radius:4px;">
+<option value="auto" selected>Auto AI</option>
+<option value="openai">OpenAI</option>
+<option value="local">Local GPT-style</option>
+</select>
+</div>
+</div>
+
+<div id="chatbox" class="chatbox"></div>
+
+<input id="userInput" type="text" placeholder="Ask something..."
+style="width:70%; padding:10px; border:none;">
+
+<button onclick="sendMessage()"
+style="width:30%; background:#667eea; color:white; border:none; padding:10px;">Send</button>
+
+</div>
+
+<script>
+
+function sendMessage() {
+
+    let inputField = document.getElementById("userInput");
+    let input = inputField.value;
+
+    if (input.trim() === "") return;
+
+    let mode = document.getElementById('chatMode').value;
+    fetch(`/chatbot/?message=${encodeURIComponent(input)}&mode=${encodeURIComponent(mode)}`)
+    .then(res => res.json())
+    .then(data => {
+
+        let chatbox = document.getElementById("chatbox");
+
+        chatbox.innerHTML += `<div><b>You:</b> ${input}</div>`;
+        chatbox.innerHTML += `<div><b>Bot:</b> ${data.reply}</div>`;
+
+        inputField.value = "";
+        chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch(err => {
+        let chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML += `<div style="color:#dc3545;"><b>Bot:</b> Error connecting AI. Please try again.</div>`;
+        console.log(err);
+    });
+}
+
+// handle Enter for chat input
+document.getElementById('userInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+        e.preventDefault();
+    }
+});
+
+function startVoice() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert('Voice input not supported in this browser. Please use Chrome or Edge with voice support.');
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = function() {
+        console.log('Voice recognition started...');
+        document.querySelector('button[onclick="startVoice()"]').textContent = '🎙️ Listening...';
+    };
+
+    recognition.onerror = function(event) {
+        console.log('Speech recognition error', event.error);
+        alert('Voice recognition error: ' + event.error);
+        document.querySelector('button[onclick="startVoice()"]').textContent = '🎤 Speak Input';
+    };
+
+    recognition.onend = function() {
+        document.querySelector('button[onclick="startVoice()"]').textContent = '🎤 Speak Input';
+    };
+
+    recognition.onresult = function(event) {
+        let text = event.results[0][0].transcript.toLowerCase();
+
+        if (text.includes('age')) {
+            let age = text.match(/\d+/);
+            if (age) document.querySelector('[name="age"]').value = age[0];
+        }
+
+        if (text.includes('income')) {
+            let income = text.match(/\d+/);
+            if (income) document.querySelector('[name="income"]').value = income[0];
+        }
+
+        if (text.includes('state')) {
+            let state = text.split('state')[1];
+            if (state) document.querySelector('[name="state"]').value = state.trim();
+        }
+
+        alert('Voice input captured: ' + text);
+    };
+
+    recognition.start();
+}
+
+</script>
 
 </body>
 </html>

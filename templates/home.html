@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "SmartAssist - Inclusive Government Scheme Platform" %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    {% trans "Empowering Citizens Through Digital Inclusion" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "SmartAssist bridges the digital divide by connecting citizens with government welfare schemes through dedicated volunteers and administrators." %}
+                </p>
+                <div class="d-flex gap-3">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="btn btn-light btn-lg">
+                            <i class="fas fa-user-plus"></i> {% trans "Get Started" %}
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt"></i> {% trans "Login" %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'scheme_awareness' %}" class="btn btn-light btn-lg">
+                            <i class="fas fa-eye"></i> {% trans "View Schemes" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://via.placeholder.com/600x400/667eea/ffffff?text=Digital+Inclusion" alt="Digital Inclusion" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col">
+                <h2 class="display-5 fw-bold">{% trans "How It Works" %}</h2>
+                <p class="lead text-muted">{% trans "Simple steps to access government welfare schemes" %}</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user-plus fa-2x"></i>
+                    </div>
+                    <h4 class="mt-3">{% trans "1. Register" %}</h4>
+                    <p>{% trans "Create your account with basic details. No complex forms required." %}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-hands-helping fa-2x"></i>
+                    </div>
+                    <h4 class="mt-3">{% trans "2. Get Assistance" %}</h4>
+                    <p>{% trans "Our volunteers review your details and apply for suitable schemes on your behalf." %}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <h4 class="mt-3">{% trans "3. Track & Receive" %}</h4>
+                    <p>{% trans "Track your application status and receive benefits when approved." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SDG Impact Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">{% trans "SDG Impact" %}</h2>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="bg-white p-3 rounded shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-primary me-3 fa-2x"></i>
+                                <div>
+                                    <h5 class="mb-0">SDG 1</h5>
+                                    <small class="text-muted">No Poverty</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-white p-3 rounded shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-graduation-cap text-success me-3 fa-2x"></i>
+                                <div>
+                                    <h5 class="mb-0">SDG 4</h5>
+                                    <small class="text-muted">Quality Education</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-white p-3 rounded shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-venus-mars text-warning me-3 fa-2x"></i>
+                                <div>
+                                    <h5 class="mb-0">SDG 5</h5>
+                                    <small class="text-muted">Gender Equality</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-white p-3 rounded shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-handshake text-info me-3 fa-2x"></i>
+                                <div>
+                                    <h5 class="mb-0">SDG 17</h5>
+                                    <small class="text-muted">Partnerships</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-white p-4 rounded shadow">
+                    <h4 class="mb-3">{% trans "Our Mission" %}</h4>
+                    <p>{% trans "To create an inclusive digital ecosystem where every citizen, regardless of literacy level or digital skills, can access government welfare schemes and contribute to community development." %}</p>
+                    <div class="row text-center mt-4">
+                        <div class="col-4">
+                            <h3 class="text-primary">10K+</h3>
+                            <small class="text-muted">{% trans "Citizens Helped" %}</small>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-success">500+</h3>
+                            <small class="text-muted">{% trans "Volunteers" %}</small>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-info">50+</h3>
+                            <small class="text-muted">{% trans "Schemes" %}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Awareness Message -->
+<section class="py-5">
+    <div class="container">
+        <div class="awareness-message">
+            <div class="row align-items-center">
+                <div class="col-lg-9">
+                    <h4 class="mb-2"><i class="fas fa-bullhorn"></i> {% trans "Community Awareness Initiative" %}</h4>
+                    <p class="mb-0">{% trans "After receiving benefits, please inform your family members, friends, and neighbors about government schemes. Together, we can build an aware and empowered community!" %}</p>
+                </div>
+                <div class="col-lg-3 text-end">
+                    <i class="fas fa-users fa-3x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

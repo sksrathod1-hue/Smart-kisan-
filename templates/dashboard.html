@@ -1,106 +1,1425 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>SmartAssist Dashboard</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAssist - Agricultural Schemes Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
-        body {
-            font-family: Arial;
-            background: #f4f6f9;
-            padding: 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h1 {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d5a8c 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-logo {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 3px;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .header-logo-small {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-left: 10px;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
+        }
+
+        .user-info {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.danger {
+            background: rgba(220,53,69,0.8);
+            border-color: #dc3545;
+        }
+
+        .nav-btn.danger:hover {
+            background: rgba(220,53,69,1);
+        }
+
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d5a8c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .close-btn {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ffc107;
+        }
+
+        .modal-body {
+            padding: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: #2d5a8c;
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            background: #1a365d;
+        }
+
+        .modal-btn.secondary {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #155724;
+        }
+
+        /* STATE SCHEME DETAILS PANEL */
+        .state-details-panel {
+            background: white;
+            border: 2px solid #2d5a8c;
+            border-radius: 10px;
+            margin-top: 20px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+        }
+
+        .state-details-panel .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .state-details-panel .panel-header h4 {
+            margin: 0;
+            color: #1a365d;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .state-details-panel .close-btn {
+            border: none;
+            background: #dc3545;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.2s ease;
+        }
+
+        .state-details-panel .close-btn:hover {
+            background: #a71d2a;
+        }
+
+        .state-scheme-list {
+            max-height: 380px;
+            overflow-y: auto;
+            border-top: 1px solid #eaeaea;
+            padding-top: 10px;
+        }
+
+        .state-scheme-item {
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .state-scheme-item:hover {
+            background: #eef5ff;
+        }
+
+        .state-scheme-item h5 {
+            margin: 0 0 6px;
+            font-size: 15px;
+            color: #0d2d5f;
+            font-weight: 600;
+        }
+
+        .state-scheme-item small {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .state-scheme-item a {
+            color: #2d5a8c;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .state-scheme-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* KPI SECTION */
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .kpi-card.primary {
+            border-left-color: #2d5a8c;
+        }
+
+        .kpi-card.success {
+            border-left-color: #28a745;
+        }
+
+        .kpi-card.warning {
+            border-left-color: #ffc107;
+        }
+
+        .kpi-card.danger {
+            border-left-color: #dc3545;
+        }
+
+        .kpi-card.info {
+            border-left-color: #17a2b8;
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a365d;
+            margin: 10px 0;
+        }
+
+        .kpi-icon {
+            font-size: 24px;
+            opacity: 0.7;
+        }
+
+        /* SCHEME STATS SECTION */
+        .scheme-stats {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .scheme-stats h3 {
+            color: #1a365d;
+            font-size: 18px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2d5a8c;
+            padding-bottom: 10px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d5a8c;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 8px;
+        }
+
+        /* SECTION HEADER */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #2d5a8c;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gov-logo {
+            width: 40px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-header h3 {
+            color: #1a365d;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: #2d5a8c;
+            box-shadow: 0 0 0 3px rgba(45, 90, 140, 0.1);
+        }
+
+        /* STATE GRID */
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .state-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .state-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2d5a8c 0%, #17a2b8 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .state-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #2d5a8c;
+        }
+
+        .state-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .state-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .state-flag {
+            width: 50px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #128807 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1a365d;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .state-info {
+            flex: 1;
+        }
+
+        .state-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 4px;
+        }
+
+        .state-scheme-count {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .state-progress {
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2d5a8c 0%, #17a2b8 100%);
+            border-radius: 5px;
+            transition: width 0.8s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: right;
+        }
+
+        .state-actions {
             text-align: center;
         }
 
-        .container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+        .action-btn {
+            background: #2d5a8c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .card {
-            background: white;
+        .action-btn:hover {
+            background: #1a365d;
+            transform: translateY(-1px);
+        }
+
+        /* STATE SUMMARY */
+        .state-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            flex: 1;
-            min-width: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #1a365d;
+        }
+
+        .summary-value {
+            font-weight: 700;
+            color: #2d5a8c;
+            font-size: 16px;
+        }
+
+        /* CHARTS SECTION */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .chart-card h3 {
+            color: #1a365d;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2d5a8c;
+            padding-bottom: 10px;
         }
 
         canvas {
-            margin-top: 20px;
+            max-height: 300px;
+        }
+
+        /* RECENT APPLICATIONS */
+        .recent-apps {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .recent-apps h3 {
+            color: #1a365d;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2d5a8c;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: #f8f9fa;
+        }
+
+        table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a365d;
+            font-size: 13px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-applied {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #1a365d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header-left, .header-right {
+                justify-content: center;
+            }
+
+            .header-left h1 {
+                font-size: 22px;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
-
 <body>
 
-<div style="text-align:right; margin-bottom:20px;">
-    <a href="/recommend/" style="padding:10px 15px; background:#007bff; color:white; border-radius:5px; text-decoration:none;">
-        🤖 AI Recommendation
-    </a>
+<!-- HEADER -->
+<div class="header">
+    <div class="header-left">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Farmer_with_plough.svg/256px-Farmer_with_plough.svg.png" alt="Farmer Logo" class="header-logo">
+        <span class="kpi-icon">🚀</span>
+        <h1>SmartAssist Agriculture Dashboard</h1>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Government_of_India_Logo.svg/640px-Government_of_India_Logo.svg.png" alt="Govt Logo" class="header-logo-small">
+    </div>
+    <div class="header-right">
+        <div class="user-info">
+            <div>Welcome, <strong>{{ user.username }}</strong></div>
+            <div style="font-size: 12px; margin-top: 5px;">Government Schemes Portal</div>
+        </div>
+        <a href="/recommend/" class="nav-btn">🤖 AI Recommendations</a>
+        <a href="/my-applications/" class="nav-btn">📋 My Applications</a>
+        <a href="/logout/" class="nav-btn danger">🚪 Logout</a>
+    </div>
 </div>
 
-
-
-<h1>🚀 SmartAssist Analytics Dashboard</h1>
-
-<!-- TOTAL -->
+<!-- MAIN CONTAINER -->
 <div class="container">
-    <div class="card">
-        <h2>Total Applications</h2>
-        <h1>{{ total_applications }}</h1>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-section">
+        <div class="kpi-card primary">
+            <div class="kpi-label">📊 Total Schemes Available</div>
+            <div class="kpi-value">{{ total_schemes }}</div>
+        </div>
+
+        <div class="kpi-card success">
+            <div class="kpi-label">🏛️ Central Schemes</div>
+            <div class="kpi-value">{{ central_schemes }}</div>
+        </div>
+
+        <div class="kpi-card info">
+            <div class="kpi-label">🏢 State Schemes</div>
+            <div class="kpi-value">{{ state_schemes }}</div>
+        </div>
+
+        <div class="kpi-card primary">
+            <div class="kpi-label">📝 Your Applications</div>
+            <div class="kpi-value">{{ user_applications }}</div>
+        </div>
+
+        <div class="kpi-card success">
+            <div class="kpi-label">✅ Approved</div>
+            <div class="kpi-value">{{ user_approved }}</div>
+        </div>
+
+        <div class="kpi-card warning">
+            <div class="kpi-label">⏳ Total Applications</div>
+            <div class="kpi-value">{{ total_applications }}</div>
+        </div>
+    </div>
+
+    <!-- SCHEME STATISTICS -->
+    <div class="scheme-stats">
+        <h3>💡 Scheme Overview</h3>
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="stat-number">{{ central_schemes }}</div>
+                <div class="stat-label">Central Government Schemes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ state_schemes }}</div>
+                <div class="stat-label">State Government Schemes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ approved_apps }}</div>
+                <div class="stat-label">✅ Approved Applications</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ pending_apps }}</div>
+                <div class="stat-label">⏳ Pending Applications</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATE-WISE SCHEME BREAKDOWN -->
+    <div class="scheme-stats">
+        <div class="section-header">
+            <div class="header-content">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_India.svg/320px-Flag_of_India.svg.png" alt="Government of India" class="gov-logo">
+                <h3>🏛️ State-wise Agricultural Schemes Distribution</h3>
+            </div>
+            <div class="header-actions">
+                <select id="sortSelect" class="sort-select">
+                    <option value="schemes-desc">Most Schemes First</option>
+                    <option value="schemes-asc">Least Schemes First</option>
+                    <option value="name-asc">Name A-Z</option>
+                    <option value="name-desc">Name Z-A</option>
+                </select>
+                <input type="text" id="stateSearch" placeholder="🔍 Search states..." class="search-input">
+                <div class="header-stats">
+                    <span class="total-states">{{ schemes_by_state|length }}/36 States/UTs Covered</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-summary">
+            <div class="summary-stats">
+                <div class="summary-item">
+                    <span class="summary-label">🇮🇳 Total Schemes:</span>
+                    <span class="summary-value">{{ total_schemes }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">📍 Most Schemes:</span>
+                    <span class="summary-value">{{ schemes_by_state.0.state }} ({{ schemes_by_state.0.count }})</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">📊 Average per State:</span>
+                    <span class="summary-value">{{ avg_per_state }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">🎯 Coverage:</span>
+                    <span class="summary-value">100% All India</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-grid">
+            {% for state in schemes_by_state %}
+            <div class="state-card" data-state="{{ state.state }}" data-count="{{ state.count }}" data-percentage="{{ state.percentage }}">
+                <div class="state-header">
+                    <div class="state-flag">{{ state.state|slice:":2" }}</div>
+                    <div class="state-info">
+                        <div class="state-name">{{ state.state }}</div>
+                        <div class="state-scheme-count">{{ state.count }} schemes</div>
+                    </div>
+                </div>
+                <div class="state-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-percentage="{{ state.percentage }}"></div>
+                    </div>
+                    <div class="progress-text">{{ state.percentage }}% of max</div>
+                </div>
+                <div class="state-actions">
+                    <button class="action-btn" data-state="{{ state.state }}">
+                        📋 View Schemes
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div id="state-scheme-details" class="state-details-panel" style="display:none;">
+            <div class="panel-header">
+                <h4 id="detail-state-name">Selected State Schemes</h4>
+                <button class="close-btn" id="close-state-scheme-panel">✕</button>
+            </div>
+            <div id="state-scheme-list" class="state-scheme-list">
+                <p>Loading schemes...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-section">
+        <div class="chart-card">
+            <h3>📊 Application Status Distribution</h3>
+            <canvas id="statusChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>🏘️ Applications by State</h3>
+            <canvas id="stateChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>🏛️ Schemes by Department</h3>
+            <canvas id="deptChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>📍 Schemes by State</h3>
+            <canvas id="schemeStateChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>📈 State Scheme Trend (Line Chart)</h3>
+            <canvas id="schemeTrendChart"></canvas>
+        </div>
+    </div>
+
+    <!-- RECENT APPLICATIONS -->
+    <div class="recent-apps">
+        <h3>📋 Recent Applications</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Applicant Name</th>
+                    <th>Scheme</th>
+                    <th>State</th>
+                    <th>Status</th>
+                    <th>Applied Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in recent_applications %}
+                <tr>
+                    <td>{{ app.name }}</td>
+                    <td>{{ app.scheme.scheme_name }}</td>
+                    <td>{{ app.state }}</td>
+                    <td>
+                        <span class="status-badge status-{{ app.status|lower }}">
+                            {{ app.status }}
+                        </span>
+                    </td>
+                    <td>{{ app.created_at|date:"d M Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align:center; color:#6c757d;">No applications yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>🇮🇳 SmartAssist - Agricultural Schemes Portal | Government of India | All Rights Reserved</p>
+</div>
+
+<!-- MODAL FOR STATE DETAILS -->
+<div id="stateModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">State Details</h3>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn primary" onclick="closeModal()">Close</button>
+            <button class="modal-btn secondary" onclick="viewAllSchemes()">View All Schemes</button>
+        </div>
     </div>
 </div>
 
-<!-- CHARTS -->
-<div class="container">
-
-    <div class="card">
-        <h3>Status Distribution</h3>
-        <canvas id="statusChart"></canvas>
-    </div>
-
-    <div class="card">
-        <h3>Applications by State</h3>
-        <canvas id="stateChart"></canvas>
-    </div>
-
-</div>
-
-
-<!-- JS -->
+<!-- SCRIPTS -->
 <script>
-
-
-// STATE CHART
-new Chart(document.getElementById('stateChart'), {
-    type: 'bar',
-    data: {
-        labels: stateData.map(i => i.state),
-        datasets: [{
-            data: stateData.map(i => i.count)
-        }]
+    // Parse data from context
+    let statusData = JSON.parse('{{ status_data|escapejs }}');
+    let stateData = JSON.parse('{{ state_data|escapejs }}');
+    let schemesStateData = [];
+    try {
+        schemesStateData = JSON.parse('{{ schemes_by_state_json|escapejs }}');
+    } catch (e) {
+        console.warn('Invalid schemes_by_state JSON, falling back to empty array', e);
     }
-});
 
-// SCHEME CHART (SAFE CHECK)
-if (schemeData.length > 0) {
-    new Chart(document.getElementById('schemeChart'), {
-        type: 'bar',
+    let deptData = [];
+    try {
+        deptData = JSON.parse('{{ schemes_by_dept|escapejs }}');
+    } catch (e) {
+        console.warn('Invalid schemes_by_dept JSON, falling back to empty array', e);
+    }
+
+    // Chart colors
+    const colors = ['#2d5a8c', '#17a2b8', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14', '#20c997'];
+
+    // Ensure valid chart data to avoid empty render issues
+    if (!statusData || statusData.length === 0) {
+        statusData = [{ status: 'No Data', count: 1 }];
+    }
+    if (!stateData || stateData.length === 0) {
+        stateData = [{ state: 'No Data', count: 1 }];
+    }
+    if (!schemesStateData || schemesStateData.length === 0) {
+        schemesStateData = [{ state: 'No Data', count: 1 }];
+    }
+    if (!deptData || deptData.length === 0) {
+        deptData = [{ department: 'No Data', count: 1 }];
+    }
+
+    // STATUS CHART
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'doughnut',
         data: {
-            labels: schemeData.map(i => i.scheme__scheme_name),
+            labels: statusData.map(item => item.status),
             datasets: [{
-                data: schemeData.map(i => i.count)
+                data: statusData.map(item => item.count),
+                backgroundColor: colors,
+                borderColor: 'white',
+                borderWidth: 2
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 12 },
+                        padding: 15
+                    }
+                }
+            }
         }
     });
-}
 
+    // STATE CHART (Applications)
+    if (stateData.length > 0) {
+        const stateCtx = document.getElementById('stateChart').getContext('2d');
+        new Chart(stateCtx, {
+            type: 'bar',
+            data: {
+                labels: stateData.map(item => item.state || 'Unknown'),
+                datasets: [{
+                    label: 'Applications',
+                    data: stateData.map(item => item.count),
+                    backgroundColor: '#2d5a8c',
+                    borderColor: '#1a365d',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: stateData.length > 5 ? 'y' : 'x',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // DEPARTMENT CHART
+    if (deptData.length > 0) {
+        const deptCtx = document.getElementById('deptChart').getContext('2d');
+        new Chart(deptCtx, {
+            type: 'bar',
+            data: {
+                labels: deptData.map(item => item.department),
+                datasets: [{
+                    label: 'Schemes',
+                    data: deptData.map(item => item.count),
+                    backgroundColor: '#17a2b8',
+                    borderColor: '#0c5460',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // SCHEMES BY STATE CHART
+    if (schemesStateData.length > 0) {
+        const schemeStateCtx = document.getElementById('schemeStateChart').getContext('2d');
+        new Chart(schemeStateCtx, {
+            type: 'bar',
+            data: {
+                labels: schemesStateData.slice(0, 10).map(item => item.state),
+                datasets: [{
+                    label: 'Schemes Available',
+                    data: schemesStateData.slice(0, 10).map(item => item.count),
+                    backgroundColor: '#28a745',
+                    borderColor: '#155724',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // LINE CHART: SCHEME TRENDS
+        const schemeTrendCtx = document.getElementById('schemeTrendChart').getContext('2d');
+        new Chart(schemeTrendCtx, {
+            type: 'line',
+            data: {
+                labels: schemesStateData.slice(0, 12).map(item => item.state),
+                datasets: [{
+                    label: 'Schemes per State',
+                    data: schemesStateData.slice(0, 12).map(item => item.count),
+                    fill: true,
+                    borderColor: '#0077b6',
+                    backgroundColor: 'rgba(0, 119, 182, 0.3)',
+                    pointBackgroundColor: '#023e8a',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Set state bar widths
+    document.querySelectorAll('.progress-fill').forEach(fill => {
+        const percentage = fill.getAttribute('data-percentage');
+        if (percentage) {
+            fill.style.width = percentage + '%';
+        }
+    });
+
+    // Interactive functions
+    function showStateDetails(stateName, schemeCount, percentage) {
+        document.getElementById('modalTitle').textContent = `📍 ${stateName} - Scheme Details`;
+        document.getElementById('modalBody').innerHTML = `
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 48px; margin-bottom: 10px;">🇮🇳</div>
+                <h4 style="color: #1a365d; margin-bottom: 15px;">${stateName}</h4>
+            </div>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-weight: 600;">Total Schemes:</span>
+                    <span style="color: #2d5a8c; font-weight: 700;">${schemeCount}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-weight: 600;">Coverage Level:</span>
+                    <span style="color: #28a745; font-weight: 700;">${percentage}% of maximum</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="font-weight: 600;">Government Level:</span>
+                    <span style="color: #17a2b8; font-weight: 700;">Central & State</span>
+                </div>
+            </div>
+            <p style="color: #6c757d; font-size: 14px;">
+                Click "View All Schemes" to explore detailed information about all agricultural schemes available in ${stateName}, including eligibility criteria, benefits, and application procedures.
+            </p>
+        `;
+        document.getElementById('stateModal').style.display = 'block';
+    }
+
+    function normalizeUrl(url) {
+        if (!url || typeof url !== 'string') return null;
+        let cleanUrl = url.trim();
+        if (!cleanUrl) return null;
+
+        // Remove trailing spaces/punctuation chars from string
+        cleanUrl = cleanUrl.replace(/[\s\u00A0]+$/, '').replace(/[.,;]+$/, '');
+
+        // Remove unsafe protocols
+        const lower = cleanUrl.toLowerCase();
+        if (lower.startsWith('javascript:') || lower.startsWith('data:') || lower.startsWith('vbscript:')) {
+            return null;
+        }
+
+        // Normalize repeated protocol
+        cleanUrl = cleanUrl.replace(/^(https?:\/\/)+/, 'https://');
+        if (cleanUrl.startsWith('//')) {
+            cleanUrl = 'https:' + cleanUrl;
+        }
+
+        if (!cleanUrl.match(/^(https?:\/\/)/)) {
+            cleanUrl = 'https://' + cleanUrl;
+        }
+
+        try {
+            const parsed = new URL(cleanUrl);
+            if (!parsed.hostname || parsed.hostname.includes('127.0.0.1') || parsed.hostname === 'localhost') {
+                // Prevent local-bypass / wrong relative path.
+                return null;
+            }
+            // easy host check
+            if (!parsed.hostname.includes('.')) {
+                return null;
+            }
+            return parsed.toString();
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function viewSchemes(stateName) {
+        closeModal();
+        const detailPanel = document.getElementById('state-scheme-details');
+        const detailTitle = document.getElementById('detail-state-name');
+        const schemeList = document.getElementById('state-scheme-list');
+
+        detailTitle.textContent = `📋 ${stateName} - All Available Schemes`;
+        schemeList.innerHTML = '<p>Loading schemes for ' + stateName + '...</p>';
+        detailPanel.style.display = 'block';
+
+        const apiUrl = '/api/state-schemes/' + encodeURIComponent(stateName.replace(/\s+/g, '-')) + '/';
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No schemes found or invalid state');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.schemes || data.schemes.length === 0) {
+                    schemeList.innerHTML = '<p>No schemes currently available for ' + stateName + '.</p>';
+                    return;
+                }
+
+                schemeList.innerHTML = data.schemes.map(s => {
+                    const officialUrl = normalizeUrl(s.official_website);
+                    const applyUrl = normalizeUrl(s.apply_link || s.official_website);
+                    console.log('Scheme URL', s.scheme_name, { rawOfficial: s.official_website, rawApply: s.apply_link, officialUrl, applyUrl });
+                    return `
+                        <div class="state-scheme-item">
+                            <h5>${s.scheme_name}</h5>
+                            <small>Department: ${s.department} • Type: ${s.scheme_type}</small>
+                            <p>${s.description || 'No description available.'}</p>
+                            <div style="margin-top:5px;">
+                                ${officialUrl ? `<a href="${officialUrl}" target="_blank" rel="noopener">Official Website</a>` : '<span style="color:#dc3545; font-weight:600;">Official Website (not available)</span>'}
+                                ·
+                                ${applyUrl ? `<a href="${applyUrl}" target="_blank" rel="noopener">Apply Now</a>` : '<span style="color:#dc3545; font-weight:600;">Apply Now (not available)</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            })
+            .catch(err => {
+                schemeList.innerHTML = '<p>Error loading schemes: ' + err.message + '</p>';
+            });
+    }
+
+    document.getElementById('close-state-scheme-panel').addEventListener('click', () => {
+        document.getElementById('state-scheme-details').style.display = 'none';
+    });
+
+    function viewAllSchemes() {
+        const stateName = document.getElementById('modalTitle').textContent.split(' - ')[0].substring(3);
+        viewSchemes(stateName);
+    }
+
+    function closeModal() {
+        document.getElementById('stateModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('stateModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Add event listeners for state cards
+    document.querySelectorAll('.state-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const stateName = this.getAttribute('data-state');
+            const schemeCount = parseInt(this.getAttribute('data-count'));
+            const percentage = parseInt(this.getAttribute('data-percentage'));
+            showStateDetails(stateName, schemeCount, percentage);
+        });
+    });
+
+    // Add event listeners for action buttons
+    document.querySelectorAll('.action-btn').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const stateName = this.getAttribute('data-state');
+            viewSchemes(stateName);
+        });
+    });
+
+    // Add click animation to cards
+    document.querySelectorAll('.state-card').forEach(card => {
+        card.addEventListener('click', function() {
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+
+    // Search functionality
+    document.getElementById('stateSearch').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const stateCards = document.querySelectorAll('.state-card');
+
+        stateCards.forEach(card => {
+            const stateName = card.querySelector('.state-name').textContent.toLowerCase();
+            if (stateName.includes(searchTerm)) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeIn 0.3s ease';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update visible count
+        const visibleCards = document.querySelectorAll('.state-card[style*="block"]');
+        const totalCards = stateCards.length;
+        const headerStats = document.querySelector('.total-states');
+        if (searchTerm) {
+            headerStats.textContent = `${visibleCards.length}/${totalCards} States/UTs Shown`;
+        } else {
+            headerStats.textContent = `${totalCards}/36 States/UTs Covered`;
+        }
+    });
+
+    // Sort functionality
+    document.getElementById('sortSelect').addEventListener('change', function() {
+        const sortBy = this.value;
+        const stateGrid = document.querySelector('.state-grid');
+        const stateCards = Array.from(document.querySelectorAll('.state-card'));
+
+        stateCards.sort((a, b) => {
+            const nameA = a.querySelector('.state-name').textContent;
+            const nameB = b.querySelector('.state-name').textContent;
+            const countA = parseInt(a.querySelector('.state-scheme-count').textContent);
+            const countB = parseInt(b.querySelector('.state-scheme-count').textContent);
+
+            switch(sortBy) {
+                case 'schemes-desc':
+                    return countB - countA;
+                case 'schemes-asc':
+                    return countA - countB;
+                case 'name-asc':
+                    return nameA.localeCompare(nameB);
+                case 'name-desc':
+                    return nameB.localeCompare(nameA);
+                default:
+                    return 0;
+            }
+        });
+
+        // Re-append sorted cards
+        stateCards.forEach(card => {
+            stateGrid.appendChild(card);
+        });
+    });
+
+    console.log('Dashboard data loaded successfully');
+    console.log('Status:', statusData);
+    console.log('State Applications:', stateData);
+    console.log('Schemes by State:', schemesStateData);
+    console.log('Schemes by Department:', deptData);
 </script>
 
 </body>

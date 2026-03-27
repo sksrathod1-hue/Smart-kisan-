@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Applications</title>
+</head>
+<body style="font-family:Arial; background:#f4f6f9; padding:20px;">
+
+<h2>📄 My Applications</h2>
+
+{% for app in applications %}
+<div style="background:white; padding:15px; margin:10px 0; border-radius:10px;">
+    <b>{{ app.name }}</b><br>
+    State: {{ app.state }}<br>
+Status:
+{% if app.status == "Approved" %}
+<span style="color:green;">✔ Approved</span>
+{% elif app.status == "Rejected" %}
+<span style="color:red;">❌ Rejected</span>
+{% else %}
+<span style="color:orange;">⏳ Pending</span>
+{% endif %}
+<br>
+    Date: {{ app.created_at }}
+</div>
+{% endfor %}
+
+
+
+
+</body>
+</html>
+
+@login_required
+def dashboard(request):
+
+@login_required
+def recommend_schemes(request):
+
+@login_required
+def my_applications(request):
+    applications = ApplicationRequest.objects.filter(user=request.user).order_by('-created_at')
+
+    return render(request, 'my_applications.html', {
+        'applications': applications
+    })
+

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Government Schemes - SmartAssist" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-5 fw-bold text-center mb-4">
+                <i class="fas fa-file-alt text-primary"></i>
+                {% trans "Government Welfare Schemes" %}
+            </h1>
+            <p class="lead text-center text-muted">
+                {% trans "Explore various government schemes available for citizens. Our volunteers will help you apply for the most suitable ones." %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <input type="text" id="schemeSearch" class="form-control" placeholder="{% trans 'Search schemes...' %}">
+        </div>
+        <div class="col-md-3">
+            <select id="stateFilter" class="form-select">
+                <option value="">{% trans "All States" %}</option>
+                <option value="Maharashtra">{% trans "Maharashtra" %}</option>
+                <option value="Karnataka">{% trans "Karnataka" %}</option>
+                <option value="Tamil Nadu">{% trans "Tamil Nadu" %}</option>
+                <option value="Delhi">{% trans "Delhi" %}</option>
+                <!-- Add more states -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select id="categoryFilter" class="form-select">
+                <option value="">{% trans "All Categories" %}</option>
+                <option value="Central">{% trans "Central" %}</option>
+                <option value="State">{% trans "State" %}</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Schemes Grid -->
+    <div class="row" id="schemesContainer">
+        {% for scheme in schemes %}
+        <div class="col-lg-4 col-md-6 mb-4 scheme-card" data-state="{{ scheme.state }}" data-category="{{ scheme.scheme_type }}">
+            <div class="card card-scheme h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-file-contract"></i>
+                        {{ scheme.scheme_name }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <span class="badge bg-{% if scheme.scheme_type == 'Central' %}success{% else %}info{% endif %}">
+                            {{ scheme.scheme_type }}
+                        </span>
+                        <span class="badge bg-secondary ms-1">{{ scheme.state }}</span>
+                    </div>
+
+                    <p class="card-text text-muted mb-3">
+                        {{ scheme.description|truncatechars:150 }}
+                    </p>
+
+                    {% if scheme.benefits %}
+                    <div class="mb-3">
+                        <strong>{% trans "Benefits:" %}</strong>
+                        <p class="text-success mb-0">{{ scheme.benefits|truncatechars:100 }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <strong>{% trans "Eligibility:" %}</strong>
+                        <ul class="list-unstyled small mb-0">
+                            {% if scheme.min_age %}
+                            <li><i class="fas fa-check text-success"></i> {% trans "Age:" %} {{ scheme.min_age }} - {{ scheme.max_age }} {% trans "years" %}</li>
+                            {% endif %}
+                            {% if scheme.income_limit %}
+                            <li><i class="fas fa-check text-success"></i> {% trans "Income:" %} ≤ ₹{{ scheme.income_limit|floatformat:0 }}</li>
+                            {% endif %}
+                            {% if scheme.category and scheme.category != 'All' %}
+                            <li><i class="fas fa-check text-success"></i> {% trans "Category:" %} {{ scheme.category }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if scheme.official_website %}
+                        <a href="{{ scheme.official_website }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-external-link-alt"></i> {% trans "Official Site" %}
+                        </a>
+                        {% endif %}
+                        <button class="btn btn-sm btn-primary" onclick="showSchemeDetails({{ scheme.id }})">
+                            <i class="fas fa-info-circle"></i> {% trans "Details" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not schemes %}
+    <div class="text-center py-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">{% trans "No schemes found" %}</h4>
+        <p class="text-muted">{% trans "Please check back later or contact support." %}</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Scheme Details Modal -->
+<div class="modal fade" id="schemeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="schemeModalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="schemeModalBody">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+                <a href="{% url 'apply_assistance' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> {% trans "Apply for Assistance" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('schemeSearch').addEventListener('input', filterSchemes);
+document.getElementById('stateFilter').addEventListener('change', filterSchemes);
+document.getElementById('categoryFilter').addEventListener('change', filterSchemes);
+
+function filterSchemes() {
+    const searchTerm = document.getElementById('schemeSearch').value.toLowerCase();
+    const stateFilter = document.getElementById('stateFilter').value;
+    const categoryFilter = document.getElementById('categoryFilter').value;
+
+    const cards = document.querySelectorAll('.scheme-card');
+
+    cards.forEach(card => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        const state = card.dataset.state;
+        const category = card.dataset.category;
+
+        const matchesSearch = title.includes(searchTerm);
+        const matchesState = !stateFilter || state === stateFilter;
+        const matchesCategory = !categoryFilter || category === categoryFilter;
+
+        if (matchesSearch && matchesState && matchesCategory) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function showSchemeDetails(schemeId) {
+    // This would typically fetch scheme details via AJAX
+    // For now, we'll show a placeholder
+    document.getElementById('schemeModalTitle').textContent = 'Scheme Details';
+    document.getElementById('schemeModalBody').innerHTML = `
+        <p>Detailed information about the scheme would be loaded here.</p>
+        <p>This includes full description, benefits, documents required, and application process.</p>
+    `;
+    new bootstrap.Modal(document.getElementById('schemeModal')).show();
+}
+</script>
+{% endblock %}

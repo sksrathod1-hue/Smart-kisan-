@@ -24,7 +24,7 @@ class ApplicationRequestAdmin(admin.ModelAdmin):
 # NOTIFICATION ADMIN
 # -----------------------------
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'message', 'created_at')
+    list_display = ('user', 'notification_type', 'message', 'sent_at', 'is_sent')
 
 
 # REGISTER MODELS
