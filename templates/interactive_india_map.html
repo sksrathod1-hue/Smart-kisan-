@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive India Schemes Map</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .state-shape {
+      fill: rgba(255,255,255,0.08);
+      stroke: rgba(255,255,255,0.16);
+      stroke-width: 1.5;
+      transition: fill 180ms ease, transform 180ms ease, filter 180ms ease;
+      cursor: pointer;
+    }
+    .state-shape:hover,
+    .state-shape.active {
+      fill: rgba(56, 189, 248, 0.35);
+      filter: drop-shadow(0 24px 40px rgba(14, 165, 233, 0.15));
+      transform: translateY(-1px);
+    }
+    .state-label {
+      pointer-events: none;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.65rem;
+      fill: #f8fafc;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .map-tooltip {
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+      transform: translate(-50%, -120%);
+      opacity: 0;
+      transition: opacity 150ms ease, transform 150ms ease;
+    }
+    .map-tooltip.visible {
+      opacity: 1;
+      transform: translate(-50%, -130%);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-700 text-slate-100">
+  <div class="min-h-screen px-4 py-8 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-7xl">
+      <header class="mb-10 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div class="space-y-3">
+            <p class="inline-flex items-center rounded-full bg-cyan-500/10 px-3 py-1 text-sm font-semibold text-cyan-200 ring-1 ring-cyan-400/20">Interactive India Schemes Map</p>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl">Click any state to explore government schemes</h1>
+            <p class="max-w-2xl text-slate-300">A modern map experience with glassmorphism, animated state highlights, and instant scheme cards for selected states.</p>
+          </div>
+          <div class="inline-flex items-center gap-3 rounded-3xl bg-slate-900/80 px-4 py-3 text-sm text-slate-300 ring-1 ring-white/10 backdrop-blur-xl">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-200">📍</span>
+            <span>Designed for mobile-first responsiveness and instant state selection.</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid gap-8 xl:grid-cols-[1.4fr_0.9fr]">
+        <div class="space-y-6 rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 shadow-2xl shadow-slate-950/40 backdrop-blur-2xl">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-slate-100">India Scheme Map</h2>
+              <p class="mt-2 max-w-xl text-slate-400">Hover over a state to preview it, then click to load schemes for that region.</p>
+            </div>
+            <div class="rounded-3xl bg-cyan-500/15 px-4 py-3 text-sm text-cyan-100 ring-1 ring-cyan-200/20">Touch-friendly SVG interactions</div>
+          </div>
+
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 shadow-xl shadow-cyan-500/10">
+            <div id="tooltip" class="map-tooltip rounded-2xl border border-white/15 bg-slate-950/95 px-4 py-2 text-sm text-slate-100 shadow-2xl shadow-slate-950/30">State</div>
+            <div class="overflow-hidden rounded-[1.75rem] bg-slate-950/20 p-4 shadow-inner shadow-slate-950/20">
+              <svg viewBox="0 0 250 240" class="h-[min(520px,80vh)] w-full" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive India map">
+                <g class="state-shape" data-state="Rajasthan" tabindex="0" role="button" aria-label="Rajasthan">
+                  <polygon points="18,18 78,18 78,86 18,86" />
+                  <text x="24" y="42" class="state-label">Rajasthan</text>
+                </g>
+                <g class="state-shape" data-state="Gujarat" tabindex="0" role="button" aria-label="Gujarat">
+                  <polygon points="18,88 55,88 55,122 18,122" />
+                  <text x="24" y="108" class="state-label">Gujarat</text>
+                </g>
+                <g class="state-shape" data-state="Maharashtra" tabindex="0" role="button" aria-label="Maharashtra">
+                  <polygon points="54,82 118,82 118,140 54,140" />
+                  <text x="62" y="112" class="state-label">Maharashtra</text>
+                </g>
+                <g class="state-shape" data-state="Karnataka" tabindex="0" role="button" aria-label="Karnataka">
+                  <polygon points="74,140 118,140 118,186 74,186" />
+                  <text x="80" y="166" class="state-label">Karnataka</text>
+                </g>
+                <g class="state-shape" data-state="Tamil Nadu" tabindex="0" role="button" aria-label="Tamil Nadu">
+                  <polygon points="94,186 124,186 124,220 94,220" />
+                  <text x="98" y="206" class="state-label">Tamil Nadu</text>
+                </g>
+                <g class="state-shape" data-state="Kerala" tabindex="0" role="button" aria-label="Kerala">
+                  <polygon points="100,220 114,220 114,238 100,238" />
+                  <text x="102" y="232" class="state-label">Kerala</text>
+                </g>
+                <g class="state-shape" data-state="Telangana" tabindex="0" role="button" aria-label="Telangana">
+                  <polygon points="82,42 108,42 108,80 82,80" />
+                  <text x="86" y="62" class="state-label">Telangana</text>
+                </g>
+                <g class="state-shape" data-state="Andhra Pradesh" tabindex="0" role="button" aria-label="Andhra Pradesh">
+                  <polygon points="110,88 154,88 154,138 110,138" />
+                  <text x="116" y="118" class="state-label">Andhra Pradesh</text>
+                </g>
+                <g class="state-shape" data-state="Odisha" tabindex="0" role="button" aria-label="Odisha">
+                  <polygon points="146,66 184,66 184,102 146,102" />
+                  <text x="152" y="88" class="state-label">Odisha</text>
+                </g>
+                <g class="state-shape" data-state="West Bengal" tabindex="0" role="button" aria-label="West Bengal">
+                  <polygon points="178,34 214,34 214,90 178,90" />
+                  <text x="182" y="64" class="state-label">W Bengal</text>
+                </g>
+                <g class="state-shape" data-state="Bihar" tabindex="0" role="button" aria-label="Bihar">
+                  <polygon points="146,22 176,22 176,52 146,52" />
+                  <text x="150" y="38" class="state-label">Bihar</text>
+                </g>
+                <g class="state-shape" data-state="Uttar Pradesh" tabindex="0" role="button" aria-label="Uttar Pradesh">
+                  <polygon points="94,16 146,16 146,46 94,46" />
+                  <text x="100" y="36" class="state-label">Uttar Pradesh</text>
+                </g>
+                <g class="state-shape" data-state="Madhya Pradesh" tabindex="0" role="button" aria-label="Madhya Pradesh">
+                  <polygon points="70,40 110,40 110,78 70,78" />
+                  <text x="76" y="64" class="state-label">Madhya Pradesh</text>
+                </g>
+                <g class="state-shape" data-state="Delhi" tabindex="0" role="button" aria-label="Delhi">
+                  <circle cx="124" cy="24" r="6" />
+                  <text x="132" y="28" class="state-label">Delhi</text>
+                </g>
+                <g class="state-shape" data-state="Assam" tabindex="0" role="button" aria-label="Assam">
+                  <polygon points="212,20 246,20 246,48 212,48" />
+                  <text x="216" y="36" class="state-label">Assam</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <aside class="space-y-6 rounded-[2rem] border border-white/10 bg-white/10 p-6 shadow-2xl shadow-slate-950/30 backdrop-blur-xl">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Live scheme feed</p>
+              <h2 id="panel-title" class="mt-2 text-2xl font-semibold text-slate-100">Schemes in Maharashtra</h2>
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-3xl bg-slate-900/70 px-4 py-2 text-sm text-slate-200 ring-1 ring-white/10">
+              <span class="text-cyan-300">{}</span> Updated instantly
+            </div>
+          </div>
+
+          <div id="cards" class="grid gap-4 sm:grid-cols-1">
+            <!-- Scheme cards injected here -->
+          </div>
+
+          <div class="rounded-3xl border border-cyan-100/10 bg-slate-950/80 p-4 text-slate-300">
+            <p class="text-sm leading-6">Tap a state to preview available schemes. States without data will show a message, while supported regions display ready-to-apply options.</p>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const schemes = {
+      "Maharashtra": [
+        { name: "MJP Shetkari Karj Mukti", desc: "Loan waiver scheme for eligible farmers", category: "Agriculture" },
+        { name: "Magel Tyala Shettale", desc: "Financial support for farm ponds and water storage", category: "Soil & Water" }
+      ],
+      "Karnataka": [
+        { name: "Raitha Vidya Nidhi", desc: "Scholarship scheme for farmers' children", category: "Education" }
+      ],
+      "Telangana": [
+        { name: "Rythu Bandhu", desc: "Investment support scheme for farmers", category: "Investment" }
+      ]
+    };
+
+    const stateItems = document.querySelectorAll('[data-state]');
+    const tooltip = document.getElementById('tooltip');
+    const panelTitle = document.getElementById('panel-title');
+    const cardsContainer = document.getElementById('cards');
+    let activeState = 'Maharashtra';
+
+    const generateCard = (scheme) => {
+      const card = document.createElement('article');
+      card.className = 'group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5 p-5 shadow-xl shadow-cyan-500/10 transition duration-300 hover:-translate-y-1 hover:bg-white/10';
+      card.innerHTML = `
+        <div class="space-y-3">
+          <div class="inline-flex items-center rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100">${scheme.category}</div>
+          <h3 class="text-lg font-semibold text-slate-100">${scheme.name}</h3>
+          <p class="text-slate-300">${scheme.desc}</p>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button class="rounded-2xl bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition duration-200 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/80">View Details</button>
+          <button class="rounded-2xl border border-cyan-500/40 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100 transition duration-200 hover:border-cyan-300 hover:bg-cyan-500/10 hover:text-cyan-100">Apply Now</button>
+        </div>
+      `;
+      return card;
+    };
+
+    const showSchemes = (stateName) => {
+      panelTitle.textContent = `Schemes in ${stateName}`;
+      cardsContainer.innerHTML = '';
+      cardsContainer.classList.remove('animate-fade-in-up');
+
+      const stateSchemes = schemes[stateName] || [];
+      if (!stateSchemes.length) {
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'rounded-[1.75rem] border border-dashed border-white/15 bg-white/5 p-8 text-center text-slate-300';
+        emptyCard.innerHTML = `
+          <p class="text-lg font-semibold text-slate-100">No schemes found for ${stateName}</p>
+          <p class="mt-3">Try another state or check back for new scheme data.</p>
+        `;
+        cardsContainer.appendChild(emptyCard);
+      } else {
+        stateSchemes.forEach((scheme) => cardsContainer.appendChild(generateCard(scheme)));
+      }
+
+      void cardsContainer.offsetWidth;
+      cardsContainer.classList.add('animate-fade-in-up');
+    };
+
+    const setActiveState = (stateName) => {
+      activeState = stateName;
+      stateItems.forEach((item) => item.classList.toggle('active', item.dataset.state === stateName));
+      showSchemes(stateName);
+    };
+
+    const showTooltip = (event, stateName) => {
+      tooltip.textContent = stateName;
+      tooltip.style.left = `${event.pageX}px`;
+      tooltip.style.top = `${event.pageY - 14}px`;
+      tooltip.classList.add('visible');
+    };
+
+    const hideTooltip = () => {
+      tooltip.classList.remove('visible');
+    };
+
+    stateItems.forEach((stateItem) => {
+      stateItem.addEventListener('mouseenter', (event) => showTooltip(event, stateItem.dataset.state));
+      stateItem.addEventListener('mousemove', (event) => showTooltip(event, stateItem.dataset.state));
+      stateItem.addEventListener('mouseleave', hideTooltip);
+      stateItem.addEventListener('click', () => setActiveState(stateItem.dataset.state));
+      stateItem.addEventListener('focus', (event) => showTooltip(event, stateItem.dataset.state));
+      stateItem.addEventListener('blur', hideTooltip);
+      stateItem.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          setActiveState(stateItem.dataset.state);
+        }
+      });
+    });
+
+    setActiveState(activeState);
+  </script>
+</body>
+</html>

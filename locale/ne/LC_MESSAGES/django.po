@@ -1,0 +1,60 @@
+# Django translation file for ne
+msgid ""
+msgstr ""
+"Project-Id-Version: SmartAssist 1.0\n"
+"Language: ne\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Home"
+msgstr "गृहपृष्ठ"
+
+msgid "Schemes"
+msgstr "योजनाहरू"
+
+msgid "Apply"
+msgstr "आवेदन गर्नुहोस्"
+
+msgid "My Status"
+msgstr "मेरो स्थिति"
+
+msgid "Dashboard"
+msgstr "ड्यासबोर्ड"
+
+msgid "Manage Schemes"
+msgstr "योजना व्यवस्थापन"
+
+msgid "Reports"
+msgstr "प्रतिवेदन"
+
+msgid "Profile"
+msgstr "प्रोफाइल"
+
+msgid "Logout"
+msgstr "लग आउट"
+
+msgid "Login"
+msgstr "लग इन"
+
+msgid "Register"
+msgstr "दर्ता"
+
+msgid "Contact"
+msgstr "सम्पर्क"
+
+msgid "Get Started"
+msgstr "सुरु गर्नुहोस्"
+
+msgid "View Schemes"
+msgstr "योजनाहरू हेर्नुहोस्"
+
+msgid "Citizens Helped"
+msgstr "सहायता पाएका नागरिक"
+
+msgid "Volunteers"
+msgstr "स्वयंसेवक"
+
+msgid "Create Account"
+msgstr "खाता बनाउनुहोस्"
+

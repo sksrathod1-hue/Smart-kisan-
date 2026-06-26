@@ -1,0 +1,75 @@
+# Django translation file for te
+msgid ""
+msgstr ""
+"Project-Id-Version: SmartAssist 1.0\n"
+"Language: te\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Home"
+msgstr "హోమ్"
+
+msgid "Schemes"
+msgstr "పథకాలు"
+
+msgid "Apply"
+msgstr "దరఖాస్తు చేయండి"
+
+msgid "My Status"
+msgstr "నా స్థితి"
+
+msgid "Dashboard"
+msgstr "డాష్‌బోర్డ్"
+
+msgid "Admin Dashboard"
+msgstr "అడ్మిన్ డాష్‌బోర్డ్"
+
+msgid "Manage Schemes"
+msgstr "పథకాల నిర్వహణ"
+
+msgid "Reports"
+msgstr "నివేదికలు"
+
+msgid "Profile"
+msgstr "ప్రొఫైల్"
+
+msgid "Logout"
+msgstr "లాగ్ అవుట్"
+
+msgid "Login"
+msgstr "లాగిన్"
+
+msgid "Register"
+msgstr "నమోదు"
+
+msgid "Inclusive Digital Platform for Government Welfare Schemes"
+msgstr "ప్రభుత్వ సంక్షేమ పథకాల కోసం సమగ్ర డిజిటల్ వేదిక"
+
+msgid "Empowering citizens through digital inclusion"
+msgstr "డిజిటల్ చేరికతో పౌరులను బలోపేతం చేయడం"
+
+msgid "Contact"
+msgstr "సంప్రదింపు"
+
+msgid "All rights reserved."
+msgstr "సర్వ హక్కులు రిజర్వ్ చేయబడ్డాయి."
+
+msgid "Get Started"
+msgstr "ప్రారంభించండి"
+
+msgid "View Schemes"
+msgstr "పథకాలు చూడండి"
+
+msgid "Our Mission"
+msgstr "మా లక్ష్యం"
+
+msgid "Citizens Helped"
+msgstr "సహాయం పొందిన పౌరులు"
+
+msgid "Volunteers"
+msgstr "స్వచ్ఛందులు"
+
+msgid "Create Account"
+msgstr "ఖాతా సృష్టించండి"
+

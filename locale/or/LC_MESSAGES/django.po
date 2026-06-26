@@ -1,0 +1,60 @@
+# Django translation file for or
+msgid ""
+msgstr ""
+"Project-Id-Version: SmartAssist 1.0\n"
+"Language: or\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Home"
+msgstr "ହୋମ"
+
+msgid "Schemes"
+msgstr "ଯୋଜନା"
+
+msgid "Apply"
+msgstr "ଆବେଦନ କରନ୍ତୁ"
+
+msgid "My Status"
+msgstr "ମୋ ସ୍ଥିତି"
+
+msgid "Dashboard"
+msgstr "ଡ୍ୟାଶ୍‌ବୋର୍ଡ"
+
+msgid "Manage Schemes"
+msgstr "ଯୋଜନା ପରିଚାଳନା"
+
+msgid "Reports"
+msgstr "ରିପୋର୍ଟ"
+
+msgid "Profile"
+msgstr "ପ୍ରୋଫାଇଲ"
+
+msgid "Logout"
+msgstr "ଲଗ୍ ଆଉଟ"
+
+msgid "Login"
+msgstr "ଲଗ୍ ଇନ"
+
+msgid "Register"
+msgstr "ପଞ୍ଜିକରଣ"
+
+msgid "Contact"
+msgstr "ଯୋଗାଯୋଗ"
+
+msgid "Get Started"
+msgstr "ଆରମ୍ଭ କରନ୍ତୁ"
+
+msgid "View Schemes"
+msgstr "ଯୋଜନା ଦେଖନ୍ତୁ"
+
+msgid "Citizens Helped"
+msgstr "ସାହାଯ୍ୟ ପ୍ରାପ୍ତ ନାଗରିକ"
+
+msgid "Volunteers"
+msgstr "ସ୍ୱେଚ୍ଛାସେବୀ"
+
+msgid "Create Account"
+msgstr "ଖାତା ଖୋଲନ୍ତୁ"
+

@@ -94,7 +94,7 @@
                                     {% trans "Processing by volunteer" %}
                                 {% endif %}
                             </small>
-                            <button class="btn btn-sm btn-outline-primary" onclick="viewTimeline({{ application.id }})">
+                            <button class="btn btn-sm btn-outline-primary timeline-btn" data-application-id="{{ application.id }}" type="button">
                                 <i class="fas fa-history"></i> {% trans "Timeline" %}
                             </button>
                         </div>
@@ -225,5 +225,11 @@ function viewTimeline(applicationId) {
     `;
     new bootstrap.Modal(document.getElementById('timelineModal')).show();
 }
+
+document.querySelectorAll('.timeline-btn').forEach(function (button) {
+    button.addEventListener('click', function () {
+        viewTimeline(this.dataset.applicationId);
+    });
+});
 </script>
 {% endblock %}

@@ -1,179 +1,515 @@
-{% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% trans "Government Schemes" %} — SmartAssist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/scheme-platform.css' %}" />
+</head>
+<body
+  class="sp-body"
+  data-authenticated="{{ user.is_authenticated|lower }}"
+  data-login-url="{% url 'login' %}"
+  data-apply-base="/{{ LANGUAGE_CODE }}/apply/"
+>
 
-{% block title %}{% trans "Government Schemes - SmartAssist" %}{% endblock %}
+<!-- Animated background -->
+<div class="sp-bg" aria-hidden="true"></div>
 
-{% block content %}
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col">
-            <h1 class="display-5 fw-bold text-center mb-4">
-                <i class="fas fa-file-alt text-primary"></i>
-                {% trans "Government Welfare Schemes" %}
-            </h1>
-            <p class="lead text-center text-muted">
-                {% trans "Explore various government schemes available for citizens. Our volunteers will help you apply for the most suitable ones." %}
-            </p>
-        </div>
+<!-- ===================== NAVBAR ===================== -->
+<nav class="sp-navbar" role="navigation" aria-label="Main navigation">
+
+  <!-- Brand -->
+  <a href="{% url 'home' %}" class="sp-navbar-brand" aria-label="SmartAssist Home">
+    <div class="sp-nav-logo-icon" aria-hidden="true">🏛️</div>
+    <div class="sp-nav-logo-text">
+      <span class="brand-name">SmartAssist</span>
+      <span class="brand-sub">{% trans "Gov Scheme Portal" %}</span>
     </div>
+  </a>
 
-    <!-- Search and Filter -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <input type="text" id="schemeSearch" class="form-control" placeholder="{% trans 'Search schemes...' %}">
-        </div>
-        <div class="col-md-3">
-            <select id="stateFilter" class="form-select">
-                <option value="">{% trans "All States" %}</option>
-                <option value="Maharashtra">{% trans "Maharashtra" %}</option>
-                <option value="Karnataka">{% trans "Karnataka" %}</option>
-                <option value="Tamil Nadu">{% trans "Tamil Nadu" %}</option>
-                <option value="Delhi">{% trans "Delhi" %}</option>
-                <!-- Add more states -->
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select id="categoryFilter" class="form-select">
-                <option value="">{% trans "All Categories" %}</option>
-                <option value="Central">{% trans "Central" %}</option>
-                <option value="State">{% trans "State" %}</option>
-            </select>
-        </div>
-    </div>
+  <!-- Desktop links -->
+  <ul class="sp-nav-links" role="list">
+    <li><a href="{% url 'home' %}"             class="sp-nav-link">🏠 {% trans "Home" %}</a></li>
+    <li><a href="{% url 'scheme_awareness' %}" class="sp-nav-link active">📋 {% trans "Schemes" %}</a></li>
+    <li><a href="#categories"                   class="sp-nav-link">🏷️ {% trans "Categories" %}</a></li>
+    <li><a href="#public-dashboard"             class="sp-nav-link">📊 {% trans "Dashboard" %}</a></li>
+  </ul>
 
-    <!-- Schemes Grid -->
-    <div class="row" id="schemesContainer">
-        {% for scheme in schemes %}
-        <div class="col-lg-4 col-md-6 mb-4 scheme-card" data-state="{{ scheme.state }}" data-category="{{ scheme.scheme_type }}">
-            <div class="card card-scheme h-100">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-file-contract"></i>
-                        {{ scheme.scheme_name }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-2">
-                        <span class="badge bg-{% if scheme.scheme_type == 'Central' %}success{% else %}info{% endif %}">
-                            {{ scheme.scheme_type }}
-                        </span>
-                        <span class="badge bg-secondary ms-1">{{ scheme.state }}</span>
-                    </div>
-
-                    <p class="card-text text-muted mb-3">
-                        {{ scheme.description|truncatechars:150 }}
-                    </p>
-
-                    {% if scheme.benefits %}
-                    <div class="mb-3">
-                        <strong>{% trans "Benefits:" %}</strong>
-                        <p class="text-success mb-0">{{ scheme.benefits|truncatechars:100 }}</p>
-                    </div>
-                    {% endif %}
-
-                    <div class="mb-3">
-                        <strong>{% trans "Eligibility:" %}</strong>
-                        <ul class="list-unstyled small mb-0">
-                            {% if scheme.min_age %}
-                            <li><i class="fas fa-check text-success"></i> {% trans "Age:" %} {{ scheme.min_age }} - {{ scheme.max_age }} {% trans "years" %}</li>
-                            {% endif %}
-                            {% if scheme.income_limit %}
-                            <li><i class="fas fa-check text-success"></i> {% trans "Income:" %} ≤ ₹{{ scheme.income_limit|floatformat:0 }}</li>
-                            {% endif %}
-                            {% if scheme.category and scheme.category != 'All' %}
-                            <li><i class="fas fa-check text-success"></i> {% trans "Category:" %} {{ scheme.category }}</li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-                <div class="card-footer bg-light">
-                    <div class="d-flex justify-content-between align-items-center">
-                        {% if scheme.official_website %}
-                        <a href="{{ scheme.official_website }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-external-link-alt"></i> {% trans "Official Site" %}
-                        </a>
-                        {% endif %}
-                        <button class="btn btn-sm btn-primary" onclick="showSchemeDetails({{ scheme.id }})">
-                            <i class="fas fa-info-circle"></i> {% trans "Details" %}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    {% if not schemes %}
-    <div class="text-center py-5">
-        <i class="fas fa-search fa-3x text-muted mb-3"></i>
-        <h4 class="text-muted">{% trans "No schemes found" %}</h4>
-        <p class="text-muted">{% trans "Please check back later or contact support." %}</p>
-    </div>
+  <!-- Actions -->
+  <div class="sp-nav-actions">
+    {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}" class="sp-user-chip" aria-label="Your profile">
+        <div class="user-avatar">{{ user.username|first|upper }}</div>
+        {{ user.username }}
+      </a>
+      <a href="{% url 'logout' %}" class="sp-btn-login" style="border-color:rgba(239,68,68,.4);color:#fca5a5;background:rgba(239,68,68,.12)">
+        🚪 {% trans "Logout" %}
+      </a>
+    {% else %}
+      <a href="{% url 'login' %}"    class="sp-btn-login">🔑 {% trans "Login" %}</a>
+      <a href="{% url 'register' %}" class="sp-btn-login" style="background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.4);color:#6ee7b7">
+        ✨ {% trans "Register" %}
+      </a>
     {% endif %}
-</div>
 
-<!-- Scheme Details Modal -->
-<div class="modal fade" id="schemeModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="schemeModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="schemeModalBody">
-                <!-- Content will be loaded here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
-                <a href="{% url 'apply_assistance' %}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> {% trans "Apply for Assistance" %}
-                </a>
-            </div>
-        </div>
+    <!-- Language switcher -->
+    <div class="sp-lang-switcher" id="sp-lang-switcher">
+      <button class="sp-lang-btn" id="sp-lang-toggle" aria-label="Switch language" aria-expanded="false">🌐 {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE|upper }}</button>
+      <div class="sp-lang-dropdown" id="sp-lang-dropdown" role="listbox">
+        <a href="{% url 'set_language' %}?lang=en&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'en' %}active{% endif %}">English</a>
+        <a href="{% url 'set_language' %}?lang=hi&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'hi' %}active{% endif %}">हिंदी</a>
+        <a href="{% url 'set_language' %}?lang=mr&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'mr' %}active{% endif %}">मराठी</a>
+        <a href="{% url 'set_language' %}?lang=gu&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'gu' %}active{% endif %}">ગુજરાતી</a>
+        <a href="{% url 'set_language' %}?lang=bn&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'bn' %}active{% endif %}">বাংলা</a>
+        <a href="{% url 'set_language' %}?lang=ta&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'ta' %}active{% endif %}">தமிழ்</a>
+        <a href="{% url 'set_language' %}?lang=te&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'te' %}active{% endif %}">తెలుగు</a>
+        <a href="{% url 'set_language' %}?lang=kn&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'kn' %}active{% endif %}">ಕನ್ನಡ</a>
+        <a href="{% url 'set_language' %}?lang=ml&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'ml' %}active{% endif %}">മലയാളം</a>
+        <a href="{% url 'set_language' %}?lang=pa&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'pa' %}active{% endif %}">ਪੰਜਾਬੀ</a>
+        <a href="{% url 'set_language' %}?lang=ur&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'ur' %}active{% endif %}">اردو</a>
+        <a href="{% url 'set_language' %}?lang=or&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'or' %}active{% endif %}">ଓଡ଼ିଆ</a>
+        <a href="{% url 'set_language' %}?lang=as&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'as' %}active{% endif %}">অসমীয়া</a>
+        <a href="{% url 'set_language' %}?lang=ne&next={{ request.get_full_path|urlencode }}"  class="sp-lang-item {% if LANGUAGE_CODE == 'ne' %}active{% endif %}">नेपाली</a>
+      </div>
     </div>
+
+    <!-- Mobile hamburger -->
+    <button class="sp-hamburger" id="sp-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="sp-mobile-nav" id="sp-mobile-nav" role="navigation" aria-label="Mobile navigation">
+  <a href="{% url 'home' %}"             class="sp-nav-link">🏠 {% trans "Home" %}</a>
+  <a href="{% url 'scheme_awareness' %}" class="sp-nav-link active">📋 {% trans "Schemes" %}</a>
+  <a href="#categories"                  class="sp-nav-link">🏷️ {% trans "Categories" %}</a>
+  <a href="#public-dashboard"            class="sp-nav-link">📊 {% trans "Dashboard" %}</a>
+  {% if user.is_authenticated %}
+  <a href="{% url 'logout' %}"           class="sp-nav-link" style="color:#fca5a5">🚪 {% trans "Logout" %}</a>
+  {% else %}
+  <a href="{% url 'login' %}"            class="sp-nav-link">🔑 {% trans "Login" %}</a>
+  <a href="{% url 'register' %}"         class="sp-nav-link" style="color:#6ee7b7">✨ {% trans "Register" %}</a>
+  {% endif %}
 </div>
 
-{% endblock %}
+<!-- ===================== HERO ===================== -->
+<header class="sp-hero">
+  <div class="sp-hero-badge" aria-label="Portal label">🇮🇳 {% trans "Government Scheme Portal" %}</div>
+  <h1 class="sp-hero-title">
+    {% trans "Discover" %} <span class="gradient-text">{% trans "Government Schemes" %}</span><br/>
+    {% trans "Built for Every Citizen" %}
+  </h1>
+  <p class="sp-hero-sub">
+    {% blocktrans with total=total_schemes %}Explore {{ total }} welfare schemes — browse freely, filter by state or category, and apply for the ones you qualify for.{% endblocktrans %}
+  </p>
+</header>
 
-{% block extra_js %}
+<!-- ===================== STATS BAR ===================== -->
+<section class="sp-stats-bar" id="public-dashboard" aria-label="Scheme statistics">
+  <div class="sp-stat-card">
+    <span class="sp-stat-icon" aria-hidden="true">📋</span>
+    <div class="sp-stat-num" data-target="{{ total_schemes }}">{{ total_schemes }}</div>
+    <div class="sp-stat-label">{% trans "Total Schemes" %}</div>
+  </div>
+  <div class="sp-stat-card">
+    <span class="sp-stat-icon" aria-hidden="true">🏛️</span>
+    <div class="sp-stat-num blue" data-target="{{ central_schemes }}">{{ central_schemes }}</div>
+    <div class="sp-stat-label">{% trans "Central Schemes" %}</div>
+  </div>
+  <div class="sp-stat-card">
+    <span class="sp-stat-icon" aria-hidden="true">🗺️</span>
+    <div class="sp-stat-num green" data-target="{{ state_schemes }}">{{ state_schemes }}</div>
+    <div class="sp-stat-label">{% trans "State Schemes" %}</div>
+  </div>
+  <div class="sp-stat-card">
+    <span class="sp-stat-icon" aria-hidden="true">🏷️</span>
+    <div class="sp-stat-num amber" data-target="{{ categories|length }}">{{ categories|length }}</div>
+    <div class="sp-stat-label">{% trans "Categories" %}</div>
+  </div>
+</section>
+
+<!-- ===================== SEARCH BAR ===================== -->
+<section class="sp-search-wrap" aria-label="Search schemes">
+  <form method="GET" action="{% url 'scheme_awareness' %}" role="search">
+    {% if state_filter  %}<input type="hidden" name="state"    value="{{ state_filter }}">{% endif %}
+    {% if category_filter %}<input type="hidden" name="category" value="{{ category_filter }}">{% endif %}
+    {% if type_filter   %}<input type="hidden" name="type"     value="{{ type_filter }}">{% endif %}
+    <div class="sp-search-box">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input
+        id="sp-search-input"
+        class="sp-search-input"
+        type="search"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="{% trans "Search schemes by name, category, keyword…" %}"
+        autocomplete="off"
+        aria-label="Search schemes"
+      />
+      <button type="submit" class="sp-search-btn">{% trans "Search" %}</button>
+    </div>
+  </form>
+  <!-- Live search (client-side) -->
+  <div style="margin-top:10px;display:flex;justify-content:center;">
+    <input
+      id="sp-live-search"
+      type="search"
+      placeholder="⚡ Instant filter (no page reload)…"
+      autocomplete="off"
+      aria-label="Instant filter"
+      style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 16px;color:#f1f5f9;font-size:13px;font-family:inherit;outline:none;width:100%;max-width:480px;"
+    />
+  </div>
+</section>
+
+<!-- ===================== TYPE FILTER CHIPS ===================== -->
+<section class="sp-filter-chips" aria-label="Quick type filters">
+  <span class="sp-filter-label">{% trans "Quick filter" %}:</span>
+  <button class="sp-chip {% if not type_filter %}active{% endif %}"
+          data-type-filter="" aria-pressed="{% if not type_filter %}true{% else %}false{% endif %}">
+    🌐 {% trans "All Schemes" %} <span class="chip-count">{{ total_schemes }}</span>
+  </button>
+  <button class="sp-chip {% if type_filter == 'Central' %}active{% endif %}"
+          data-type-filter="Central" aria-pressed="{% if type_filter == 'Central' %}true{% else %}false{% endif %}">
+    🏛️ {% trans "Central" %} <span class="chip-count">{{ central_schemes }}</span>
+  </button>
+  <button class="sp-chip {% if type_filter == 'State' %}active-green{% endif %}"
+          data-type-filter="State" aria-pressed="{% if type_filter == 'State' %}true{% else %}false{% endif %}">
+    🗺️ {% trans "State" %} <span class="chip-count">{{ state_schemes }}</span>
+  </button>
+</section>
+
+<!-- ===================== MAIN: SIDEBAR + GRID ===================== -->
+<main class="sp-main">
+
+  <!-- ---- FILTER SIDEBAR ---- -->
+  <aside class="sp-sidebar" aria-label="Filter schemes">
+    <div class="sp-sidebar-header">
+      <span class="sp-sidebar-title">⚙️ {% trans "Filters" %}</span>
+      {% if state_filter or category_filter or type_filter or search_query %}
+        <a href="{% url 'scheme_awareness' %}" class="sp-clear-filters" aria-label="Clear all filters">{% trans "Clear all" %}</a>
+      {% endif %}
+    </div>
+
+    <form id="sp-filter-form" method="GET" action="{% url 'scheme_awareness' %}">
+      {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+
+      <!-- State filter -->
+      <div class="sp-filter-section">
+        <div class="sp-filter-section-title">🗺️ State / UT</div>
+        <input
+          id="sp-state-search"
+          type="search"
+          placeholder="Search state…"
+          autocomplete="off"
+          aria-label="Search state"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:8px 12px;color:#f1f5f9;font-size:12.5px;font-family:inherit;outline:none;margin-bottom:10px;"
+        />
+        <div style="max-height:220px;overflow-y:auto;scrollbar-width:thin;">
+          <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if type_filter %}type={{ type_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}"
+             class="sp-filter-option {% if not state_filter %}active{% endif %}"
+             aria-current="{% if not state_filter %}true{% else %}false{% endif %}">
+            <span class="option-dot"></span>
+            All States
+            <span class="option-count">{{ total_schemes }}</span>
+          </a>
+          {% for s in states %}
+          {% if s %}
+          <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if type_filter %}type={{ type_filter }}&{% endif %}{% if category_filter %}category={{ category_filter }}&{% endif %}state={{ s|urlencode }}"
+             class="sp-filter-option {% if state_filter == s %}active{% endif %}"
+             data-state-option="{{ s }}"
+             aria-current="{% if state_filter == s %}true{% else %}false{% endif %}">
+            <span class="option-dot"></span>
+            {{ s }}
+          </a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Category filter -->
+      <div class="sp-filter-section" id="categories">
+        <div class="sp-filter-section-title">🏷️ Category</div>
+        <select name="category" class="sp-filter-select" id="category-select" aria-label="Filter by category">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+          {% if cat %}
+          <option value="{{ cat }}" {% if category_filter == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Scheme type filter -->
+      <div class="sp-filter-section">
+        <div class="sp-filter-section-title">📋 Scheme Type</div>
+        <select name="type" class="sp-filter-select" id="type-select" aria-label="Filter by scheme type">
+          <option value="">All Types</option>
+          <option value="Central" {% if type_filter == 'Central' %}selected{% endif %}>🏛️ Central</option>
+          <option value="State"   {% if type_filter == 'State'   %}selected{% endif %}>🗺️ State</option>
+        </select>
+      </div>
+
+      <!-- State filter (select) -->
+      <div class="sp-filter-section">
+        <div class="sp-filter-section-title">📍 Quick State Select</div>
+        <select name="state" class="sp-filter-select" id="state-select" aria-label="Filter by state">
+          <option value="">All States</option>
+          {% for s in states %}
+          {% if s %}
+          <option value="{{ s }}" {% if state_filter == s %}selected{% endif %}>{{ s }}</option>
+          {% endif %}
+          {% endfor %}
+        </select>
+        <button type="submit" class="sp-apply-filter-btn">Apply Filters</button>
+      </div>
+
+    </form>
+  </aside>
+
+  <!-- ---- SCHEME CARDS GRID ---- -->
+  <section aria-label="Scheme results">
+
+    <!-- Grid header -->
+    <div class="sp-grid-header">
+      <div class="sp-result-count" id="sp-result-count">
+        {% blocktrans with count=schemes|length %}Showing <strong>{{ count }}</strong> schemes{% endblocktrans %}
+        {% if search_query %} for "<em>{{ search_query }}</em>"{% endif %}
+        {% if state_filter %} in <em>{{ state_filter }}</em>{% endif %}
+        {% if category_filter %} — <em>{{ category_filter }}</em>{% endif %}
+        {% if type_filter %} ({{ type_filter }} only){% endif %}
+      </div>
+      <div class="sp-sort-wrap">
+        <span class="sp-sort-label">Sort:</span>
+        <select class="sp-sort-select" id="sp-sort-select" aria-label="Sort schemes">
+          <option>Relevance</option>
+          <option>Name A–Z</option>
+          <option>Central First</option>
+          <option>State First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="sp-schemes-grid" id="sp-schemes-grid" role="list">
+
+      {% for scheme in schemes %}
+      <article
+        class="sp-scheme-card"
+        role="listitem"
+        data-scheme-id="{{ scheme.id }}"
+        data-scheme-name="{{ scheme.scheme_name|lower }}"
+        data-scheme-title="{{ scheme.scheme_name }}"
+        data-scheme-desc="{{ scheme.description|default:'Details available on the official portal.' }}"
+        data-scheme-type="{{ scheme.scheme_type }}"
+        data-department="{{ scheme.department|default:'' }}"
+        data-category="{{ scheme.category|lower }}"
+        data-state="{{ scheme.state }}"
+        data-min-age="{{ scheme.min_age|default:'' }}"
+        data-max-age="{{ scheme.max_age|default:'' }}"
+        data-income-limit="{{ scheme.income_limit|default:'' }}"
+        data-official-website="{{ scheme.official_website|default:'' }}"
+        aria-label="{{ scheme.scheme_name }}"
+      >
+        <div class="sp-card-body">
+
+          <!-- Badges -->
+          <div class="sp-card-meta">
+            <span class="sp-badge {% if scheme.scheme_type == 'Central' %}sp-badge-central{% else %}sp-badge-state{% endif %}">
+              {% if scheme.scheme_type == 'Central' %}🏛️ Central{% else %}🗺️ State{% endif %}
+            </span>
+            {% if scheme.category and scheme.category != 'All' %}
+            <span class="sp-badge sp-badge-category" title="{{ scheme.category }}">{{ scheme.category }}</span>
+            {% endif %}
+            {% if scheme.state %}
+            <span class="sp-badge sp-badge-state-tag" title="{{ scheme.state }}">📍 {{ scheme.state|truncatechars:16 }}</span>
+            {% endif %}
+          </div>
+
+          <!-- Title -->
+          <h2 class="sp-card-title">{{ scheme.scheme_name }}</h2>
+
+          <!-- Description -->
+          <p class="sp-card-desc">
+            {{ scheme.description|default:"Details available on the official portal."|truncatechars:160 }}
+          </p>
+
+          <!-- Info row -->
+          <div class="sp-card-info-row">
+            {% if scheme.department %}
+            <div class="sp-card-info-item">
+              <span class="icon">🏢</span>
+              <span>{{ scheme.department|truncatechars:28 }}</span>
+            </div>
+            {% endif %}
+            {% if scheme.min_age and scheme.max_age %}
+            <div class="sp-card-info-item">
+              <span class="icon">👤</span>
+              <span>Age {{ scheme.min_age }}–{{ scheme.max_age }}</span>
+            </div>
+            {% endif %}
+            {% if scheme.income_limit %}
+            <div class="sp-card-info-item">
+              <span class="icon">💰</span>
+              <span>≤ ₹{{ scheme.income_limit|floatformat:0 }}/yr</span>
+            </div>
+            {% endif %}
+          </div>
+
+        </div>
+
+        <!-- Footer buttons -->
+        <footer class="sp-card-footer">
+          <a
+            href="{% url 'scheme_detail' scheme.id %}"
+            class="sp-btn-view"
+            aria-label="View details for {{ scheme.scheme_name }}"
+          >
+            👁️ {% trans "View Details" %}
+          </a>
+
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'apply' scheme.id %}"
+            class="sp-btn-apply"
+            aria-label="Apply for {{ scheme.scheme_name }}"
+          >
+            ✅ {% trans "Apply Now" %}
+          </a>
+          {% else %}
+          <button
+            class="sp-btn-apply sp-btn-apply-lock"
+            onclick="handleApplyNow('{{ scheme.id }}', '{% url 'apply' scheme.id %}')"
+            aria-label="Login to apply for {{ scheme.scheme_name }}"
+          >
+            {% trans "Apply Now" %}
+          </button>
+          {% endif %}
+        </footer>
+
+      </article>
+      {% empty %}
+      <div class="sp-no-results" id="sp-no-results" style="display:block">
+        <div class="no-results-icon">🔍</div>
+        <h3>No schemes found</h3>
+        <p>Try adjusting your filters or search query.<br/>
+           <a href="{% url 'scheme_awareness' %}" style="color:var(--primary-light)">Clear all filters</a>
+        </p>
+      </div>
+      {% endfor %}
+
+      <!-- Hidden no-results for client-side filtering -->
+      {% if schemes %}
+      <div class="sp-no-results hidden" id="sp-no-results" aria-live="polite">
+        <div class="no-results-icon">🔍</div>
+        <h3>No matching schemes</h3>
+        <p>Try a different keyword or clear the instant filter.</p>
+      </div>
+      {% endif %}
+
+    </div><!-- /sp-schemes-grid -->
+
+  </section><!-- /scheme results -->
+
+</main><!-- /sp-main -->
+
+<!-- ===================== LOGIN PROMPT MODAL ===================== -->
+<div
+  class="sp-login-prompt"
+  id="sp-login-prompt"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="login-prompt-title"
+  aria-describedby="login-prompt-desc"
+>
+  <div class="sp-login-card">
+    <button
+      class="sp-login-card-close"
+      onclick="closeLoginPrompt()"
+      aria-label="Close dialog"
+    >✕</button>
+    <div class="sp-login-card-icon" aria-hidden="true">🔐</div>
+    <h3 id="login-prompt-title">Login Required</h3>
+    <p id="login-prompt-desc">
+      You need to be logged in to apply for this scheme.<br/>
+      It's free and takes less than a minute!
+    </p>
+    <div class="sp-login-card-actions">
+      <button class="sp-btn-go-login" onclick="goToLogin()">
+        🔑 Login to Apply
+      </button>
+      <a href="{% url 'register' %}" class="sp-btn-go-login"
+         style="background:linear-gradient(135deg,#059669 0%,#065f46 100%)">
+        ✨ Register Free
+      </a>
+      <button class="sp-btn-cancel" onclick="closeLoginPrompt()">
+        Cancel
+      </button>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:20px;margin-bottom:0">
+      You can browse all schemes without logging in.
+      Login is only needed to <strong style="color:var(--text-light)">apply</strong>.
+    </p>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="sp-footer" role="contentinfo">
+  <p>
+    SmartAssist Government Scheme Platform &nbsp;|&nbsp;
+    <a href="{% url 'scheme_awareness' %}">Browse Schemes</a> &nbsp;|&nbsp;
+    {% if user.is_authenticated %}
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a> · <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+  </p>
+  <p style="margin-top:6px;opacity:.5;font-size:12px;">
+    Free to browse. Login only required to apply.
+  </p>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
 <script>
-document.getElementById('schemeSearch').addEventListener('input', filterSchemes);
-document.getElementById('stateFilter').addEventListener('change', filterSchemes);
-document.getElementById('categoryFilter').addEventListener('change', filterSchemes);
+  /* Expose language code for apply URL construction */
+  document.body.dataset.applyBase = '/{{ LANGUAGE_CODE }}/apply/';
+  document.body.dataset.loginUrl  = '{% url "login" %}';
 
-function filterSchemes() {
-    const searchTerm = document.getElementById('schemeSearch').value.toLowerCase();
-    const stateFilter = document.getElementById('stateFilter').value;
-    const categoryFilter = document.getElementById('categoryFilter').value;
+  /* Client-side sort */
+  document.getElementById('sp-sort-select')?.addEventListener('change', function () {
+    const grid  = document.getElementById('sp-schemes-grid');
+    const cards = Array.from(grid.querySelectorAll('.sp-scheme-card'));
+    const val   = this.value;
 
-    const cards = document.querySelectorAll('.scheme-card');
-
-    cards.forEach(card => {
-        const title = card.querySelector('.card-title').textContent.toLowerCase();
-        const state = card.dataset.state;
-        const category = card.dataset.category;
-
-        const matchesSearch = title.includes(searchTerm);
-        const matchesState = !stateFilter || state === stateFilter;
-        const matchesCategory = !categoryFilter || category === categoryFilter;
-
-        if (matchesSearch && matchesState && matchesCategory) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
+    cards.sort(function (a, b) {
+      if (val === 'Name A–Z') {
+        return (a.dataset.schemeName || '').localeCompare(b.dataset.schemeName || '');
+      }
+      if (val === 'Central First') {
+        const aIsCentral = a.dataset.schemeType === 'Central' ? 0 : 1;
+        const bIsCentral = b.dataset.schemeType === 'Central' ? 0 : 1;
+        return aIsCentral - bIsCentral;
+      }
+      if (val === 'State First') {
+        const aIsState = a.dataset.schemeType === 'State' ? 0 : 1;
+        const bIsState = b.dataset.schemeType === 'State' ? 0 : 1;
+        return aIsState - bIsState;
+      }
+      return 0;
     });
-}
 
-function showSchemeDetails(schemeId) {
-    // This would typically fetch scheme details via AJAX
-    // For now, we'll show a placeholder
-    document.getElementById('schemeModalTitle').textContent = 'Scheme Details';
-    document.getElementById('schemeModalBody').innerHTML = `
-        <p>Detailed information about the scheme would be loaded here.</p>
-        <p>This includes full description, benefits, documents required, and application process.</p>
-    `;
-    new bootstrap.Modal(document.getElementById('schemeModal')).show();
-}
+    cards.forEach(function (card) { grid.appendChild(card); });
+  });
 </script>
-{% endblock %}
+<script src="{% static 'js/scheme-platform.js' %}"></script>
+</body>
+</html>

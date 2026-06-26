@@ -1,0 +1,8 @@
+# Django translation file for mni
+msgid ""
+msgstr ""
+"Project-Id-Version: SmartAssist 1.0\n"
+"Language: mni\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
