@@ -1,10 +1,14 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAssist - Agricultural Schemes Dashboard</title>
+    <title>{% trans "SmartAssist - Agricultural Schemes Dashboard" %}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,8 +17,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(34, 126, 255, 0.14), transparent 32%),
+                radial-gradient(circle at 100% 20%, rgba(26, 197, 137, 0.14), transparent 28%),
+                linear-gradient(145deg, #eef4ff 0%, #d5e2f7 100%);
             min-height: 100vh;
             padding: 0;
         }
@@ -28,6 +35,9 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 90;
         }
 
         .header-left {
@@ -49,9 +59,9 @@
         }
 
         .header-logo {
-            width: 38px;
-            height: 38px;
-            object-fit: contain;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
             border-radius: 50%;
             background: white;
             padding: 3px;
@@ -59,11 +69,30 @@
         }
 
         .header-logo-small {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             object-fit: contain;
             margin-left: 10px;
             filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        .gov-banner-wrap {
+            max-width: 1400px;
+            margin: 12px auto 0;
+            padding: 0 20px;
+        }
+
+        .gov-banner {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(26, 54, 93, 0.22);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            object-fit: cover;
+            max-height: 90px;
+            background: #f3f6fb;
         }
 
         .user-info {
@@ -86,6 +115,10 @@
         .nav-btn:hover {
             background: rgba(255,255,255,0.3);
             transform: translateY(-2px);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
         }
 
         .nav-btn.danger {
@@ -287,6 +320,12 @@
             max-width: 1400px;
             margin: 30px auto;
             padding: 0 20px;
+            animation: pageFadeIn 0.45s ease;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* KPI SECTION */
@@ -304,11 +343,65 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-left: 4px solid;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card,
+        .chart-card,
+        .scheme-stats,
+        .recent-apps,
+        .state-card {
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .kpi-section .kpi-link:nth-child(1) .kpi-card { animation-delay: 0.04s; }
+        .kpi-section .kpi-link:nth-child(2) .kpi-card { animation-delay: 0.09s; }
+        .kpi-section .kpi-link:nth-child(3) .kpi-card { animation-delay: 0.14s; }
+        .kpi-section .kpi-card:nth-child(4) { animation-delay: 0.19s; }
+        .kpi-section .kpi-card:nth-child(5) { animation-delay: 0.24s; }
+        .kpi-section .kpi-card:nth-child(6) { animation-delay: 0.29s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -130%;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transition: left 0.45s ease;
         }
 
         .kpi-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .kpi-card:hover::after {
+            left: 150%;
+        }
+
+        .kpi-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .kpi-card.clickable {
+            cursor: pointer;
+        }
+
+        .kpi-card.clickable .kpi-label::after {
+            content: '  ↗';
+            font-size: 11px;
+            color: #2d5a8c;
+            font-weight: 700;
         }
 
         .kpi-card.primary {
@@ -358,6 +451,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 30px;
+            border: 1px solid rgba(26, 54, 93, 0.08);
         }
 
         .scheme-stats h3 {
@@ -380,6 +474,19 @@
             border-radius: 6px;
             text-align: center;
             border: 1px solid #e9ecef;
+            transition: all 0.25s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.09);
+            border-color: rgba(45, 90, 140, 0.28);
+        }
+
+        .stat-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
         .stat-number {
@@ -754,6 +861,326 @@
             .kpi-section {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .gov-banner {
+                max-height: 70px;
+            }
+        }
+    </style>
+
+    <!-- ADVANCED UI OVERRIDE -->
+    <style>
+        /* ANIMATED BACKGROUND */
+        body {
+            background: #eef2ff;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 65% 45% at 5% 5%, rgba(99,102,241,0.13) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 50% at 95% 95%, rgba(16,185,129,0.10) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 90% 5%, rgba(245,158,11,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container { position: relative; z-index: 1; }
+        .gov-banner-wrap { position: relative; z-index: 1; }
+
+        /* HEADER RAINBOW UNDERLINE */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #0f2640 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 18px 44px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        .header-left {
+            gap: 18px;
+        }
+
+        .header-right {
+            gap: 12px;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444, #8b5cf6, #06b6d4, #10b981, #f59e0b);
+            background-size: 400% 100%;
+            animation: rainbowLine 5s linear infinite;
+        }
+
+        @keyframes rainbowLine {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        .header-left h1 {
+            font-size: 23px;
+            background: linear-gradient(90deg, #ffffff 0%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-logo {
+            width: 62px;
+            height: 62px;
+            object-fit: contain;
+            background: transparent;
+            padding: 0;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+            border: none;
+            border-radius: 0;
+        }
+
+        .header-logo-small {
+            width: 54px;
+            height: 54px;
+            object-fit: contain;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            border: none;
+            filter: none;
+        }
+
+        .gov-banner {
+            object-fit: contain;
+            max-height: 78px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            background: white;
+            border: 1px solid rgba(99,102,241,0.12);
+        }
+
+        .nav-btn {
+            backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.danger {
+            background: rgba(239,68,68,0.65);
+            border-color: rgba(239,68,68,0.8);
+        }
+
+        /* KPI CARDS — FULL GRADIENT */
+        .kpi-card {
+            border-left: none;
+            border-radius: 16px;
+            color: white;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+            padding: 26px 22px 22px;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -20px;
+            width: 110px; height: 110px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: transform 0.4s ease;
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; right: 15px;
+            top: auto; left: auto;
+            width: 72px; height: 72px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+            transition: none;
+        }
+
+        .kpi-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 22px 50px rgba(0,0,0,0.22); }
+        .kpi-card:hover::before { transform: scale(1.5); }
+        .kpi-card:hover::after { left: auto; }
+
+        .kpi-card.primary { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
+        .kpi-card.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .kpi-card.info    { background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); }
+        .kpi-card.warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .kpi-card.danger  { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .kpi-card.purple  { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+
+        .kpi-label {
+            color: rgba(255,255,255,0.88);
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .kpi-card.clickable .kpi-label::after { content: ' ↗'; font-size: 10px; font-weight: 800; }
+
+        .kpi-value {
+            color: white;
+            font-size: 44px;
+            font-weight: 800;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            line-height: 1;
+        }
+
+        .kpi-card .kpi-icon {
+            font-size: 28px;
+            position: absolute;
+            top: 18px; right: 18px;
+            opacity: 0.72;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        /* SCHEME STATS - GLASS */
+        .scheme-stats {
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(24px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.65);
+            box-shadow: 0 4px 24px rgba(99,102,241,0.07);
+        }
+
+        .scheme-stats h3 { color: #1e3a5f; border-bottom: 2px solid #6366f1; }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #0284c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            border: 1px solid rgba(99,102,241,0.1);
+            position: relative; overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(99,102,241,0.14);
+            border-color: rgba(99,102,241,0.28);
+        }
+
+        /* SECTION HEADERS */
+        .section-header { border-bottom: 2px solid #6366f1; }
+        .section-header h3 { color: #1e3a5f; }
+
+        /* STATE CARDS */
+        .state-card {
+            border-radius: 14px;
+            border: 1px solid rgba(99,102,241,0.1);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .state-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(99,102,241,0.14);
+            border-color: rgba(99,102,241,0.28);
+        }
+
+        .state-card::before {
+            background: linear-gradient(90deg, #6366f1, #06b6d4);
+            transform-origin: left;
+        }
+
+        .state-flag {
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            color: white; font-weight: 800;
+            letter-spacing: -0.5px;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+            font-size: 13px;
+        }
+
+        .state-name { color: #1e3a5f; font-weight: 700; }
+
+        .progress-fill { background: linear-gradient(90deg, #6366f1, #06b6d4); }
+
+        .action-btn {
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            border-radius: 8px; padding: 9px 20px;
+            font-weight: 600; border: none;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #4338ca, #3730a3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+        }
+
+        /* CHARTS & RECENT APPS */
+        .chart-card, .recent-apps {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .chart-card h3, .recent-apps h3 { color: #1e3a5f; border-bottom: 2px solid #6366f1; }
+
+        table thead { background: linear-gradient(135deg, #f1f5ff, #eff6ff); }
+        table th { color: #1e3a5f; border-bottom: 2px solid rgba(99,102,241,0.12); }
+        table tr:hover { background: #f5f7ff; }
+
+        .status-pending  { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .status-applied  { background: #dbeafe; color: #1e40af; }
+
+        /* MODAL */
+        .modal { backdrop-filter: blur(4px); background: rgba(15,23,42,0.6); }
+        .modal-content { border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal-header { background: linear-gradient(135deg, #1e3a5f, #4338ca); border-radius: 16px 16px 0 0; }
+        .modal-footer { background: #f8faff; border-radius: 0 0 16px 16px; }
+        .modal-btn.primary  { background: linear-gradient(135deg, #6366f1, #4338ca); }
+        .modal-btn.secondary { background: linear-gradient(135deg, #10b981, #059669); }
+
+        /* STATE DETAILS PANEL */
+        .state-details-panel { border: 2px solid rgba(99,102,241,0.25); border-radius: 14px; }
+        .state-details-panel .panel-header h4 { color: #1e3a5f; }
+        .state-details-panel .close-btn { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .state-scheme-item { background: #f8faff; border: 1px solid rgba(99,102,241,0.1); border-radius: 10px; }
+        .state-scheme-item:hover { background: #eef2ff; }
+        .state-scheme-item h5 { color: #1e3a5f; }
+        .state-scheme-item a { color: #6366f1; }
+
+        /* STATE SUMMARY */
+        .state-summary { background: linear-gradient(135deg, #f8faff, #eff6ff); border: 1px solid rgba(99,102,241,0.1); border-radius: 12px; }
+        .summary-value { color: #6366f1; font-weight: 700; }
+
+        /* FOOTER */
+        .footer { background: linear-gradient(135deg, #0f172a, #1e3a5f); color: rgba(255,255,255,0.75); }
+
+        @media (max-width: 768px) {
+            .header { padding: 14px 16px; }
+            .header-logo { width: 48px; height: 48px; }
+            .header-logo-small { width: 42px; height: 42px; }
+            .gov-banner { max-height: 55px; }
         }
     </style>
 </head>
@@ -762,70 +1189,538 @@
 <!-- HEADER -->
 <div class="header">
     <div class="header-left">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Farmer_with_plough.svg/256px-Farmer_with_plough.svg.png" alt="Farmer Logo" class="header-logo">
-        <span class="kpi-icon">🚀</span>
-        <h1>SmartAssist Agriculture Dashboard</h1>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Government_of_India_Logo.svg/640px-Government_of_India_Logo.svg.png" alt="Govt Logo" class="header-logo-small">
+        <img src="{% static 'images/gov_emblem.png' %}" alt="Government Emblem" class="header-logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/256px-Emblem_of_India.svg.png'">
+        <h1>{% trans "SmartAssist Agriculture Dashboard" %}</h1>
+        <img src="{% static 'images/gov_emblem.png' %}" alt="Govt Logo" class="header-logo-small" onerror="this.style.display='none'">
     </div>
     <div class="header-right">
         <div class="user-info">
-            <div>Welcome, <strong>{{ user.username }}</strong></div>
-            <div style="font-size: 12px; margin-top: 5px;">Government Schemes Portal</div>
+            <div>{% trans "Welcome" %}, <strong>{{ user.username }}</strong></div>
+            <div style="font-size: 12px; margin-top: 5px;">{% trans "Government Schemes Portal" %}</div>
         </div>
-        <a href="/recommend/" class="nav-btn">🤖 AI Recommendations</a>
-        <a href="/my-applications/" class="nav-btn">📋 My Applications</a>
-        <a href="/logout/" class="nav-btn danger">🚪 Logout</a>
+        <a href="{% url 'recommend' %}" class="nav-btn">🤖 {% trans "AI Recommendations" %}</a>
+        <a href="{% url 'my_apps' %}" class="nav-btn">📋 {% trans "My Applications" %}</a>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="nav-btn danger" style="border: none;">🚪 {% trans "Logout" %}</button>
+        </form>
     </div>
 </div>
+
+<div class="gov-banner-wrap">
+    <img src="{% static 'images/meri_pehchaan_banner.png' %}" alt="Meri Pehchaan Single Sign-On" class="gov-banner" onerror="this.style.display='none'">
+</div>
+
+<!-- ═══════════════════════════════ HERO SLIDER ═══════════════════════════════ -->
+<style>
+.hero-slider-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #0a1628;
+    min-height: 420px;
+}
+.hero-slider-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 80% at 0% 50%,  rgba(99,102,241,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 100% 30%, rgba(16,185,129,0.20) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 50% at 50% 100%, rgba(245,158,11,0.12) 0%, transparent 50%);
+    z-index: 0;
+    animation: blobShift 12s ease-in-out infinite alternate;
+}
+@keyframes blobShift {
+    0%   { transform: scale(1) translateX(0) translateY(0); }
+    50%  { transform: scale(1.08) translateX(2%) translateY(-2%); }
+    100% { transform: scale(1) translateX(-2%) translateY(2%); }
+}
+.hero-slide {
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 48px 6% 52px;
+    gap: 32px;
+    opacity: 0;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    min-height: 420px;
+    transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    transform: translateX(60px);
+    pointer-events: none;
+    z-index: 1;
+}
+.hero-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+    pointer-events: auto;
+    z-index: 2;
+}
+.hero-slide.exit-left  { opacity: 0; transform: translateX(-60px); position: absolute; }
+.hero-slide.enter-right{ opacity: 0; transform: translateX(60px);  position: absolute; }
+.hero-text { flex: 1 1 0; min-width: 0; animation: heroTextIn 0.65s cubic-bezier(0.22,1,0.36,1) both; }
+@keyframes heroTextIn { from { opacity:0; transform: translateX(-40px); } to { opacity:1; transform: translateX(0); } }
+.hero-tag {
+    display: inline-block;
+    background: rgba(99,102,241,0.3);
+    border: 1px solid rgba(99,102,241,0.5);
+    color: #a5b4fc;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+    backdrop-filter: blur(8px);
+}
+.hero-title {
+    font-size: clamp(24px, 3.8vw, 44px);
+    font-weight: 800; line-height: 1.18; color: #fff; margin-bottom: 14px;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+}
+.hero-title span {
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-desc {
+    font-size: clamp(13px, 1.6vw, 16px); color: rgba(255,255,255,0.78);
+    line-height: 1.65; margin-bottom: 28px; max-width: 480px;
+}
+.hero-badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+.hero-badge {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.82); font-size: 11px; font-weight: 600;
+    padding: 4px 11px; border-radius: 20px; backdrop-filter: blur(6px);
+}
+.hero-btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.hero-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 12px 26px; border-radius: 10px; font-size: 14px; font-weight: 700;
+    cursor: pointer; text-decoration: none; border: none;
+    transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.hero-btn.primary {
+    background: linear-gradient(135deg, #6366f1, #4338ca); color: white;
+    box-shadow: 0 6px 22px rgba(99,102,241,0.45);
+}
+.hero-btn.primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(99,102,241,0.5); }
+.hero-btn.outline {
+    background: rgba(255,255,255,0.08); color: white;
+    border: 1.5px solid rgba(255,255,255,0.35); backdrop-filter: blur(8px);
+}
+.hero-btn.outline:hover { background: rgba(255,255,255,0.16); transform: translateY(-3px); }
+.hero-img-wrap {
+    flex: 0 0 auto;
+    width: clamp(360px, 46vw, 680px);
+    position: relative;
+    animation: heroImgIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+}
+@keyframes heroImgIn { from { opacity:0; transform: translateX(50px) scale(0.95); } to { opacity:1; transform: translateX(0) scale(1); } }
+.hero-img-ring {
+    display: none;
+}
+.hero-img-ring2 {
+    display: none;
+}
+@keyframes heroRingRotate { to { transform: rotate(360deg); } }
+.hero-img-glow {
+    position: absolute;
+    inset: -8% -5%;
+    border-radius: 30px;
+    filter: blur(28px);
+    opacity: 0.45;
+    z-index: 0;
+    transition: background 0.7s ease;
+}
+.hero-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 26px;
+    border: 2px solid rgba(255,255,255,0.22);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.36);
+    transition: transform 0.45s ease, box-shadow 0.45s ease;
+    display: block; position: relative; z-index: 1;
+}
+.hero-img-wrap:hover .hero-img {
+    transform: scale(1.04);
+    box-shadow: 0 22px 56px rgba(0,0,0,0.45);
+}
+.hero-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 20;
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px); border-radius: 50%; color: white; font-size: 18px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease; user-select: none;
+}
+.hero-arrow:hover { background: rgba(99,102,241,0.45); border-color: #6366f1; transform: translateY(-50%) scale(1.12); }
+.hero-arrow.prev { left: 18px; }
+.hero-arrow.next { right: 18px; }
+.hero-dots { position: absolute; bottom: 62px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 20; }
+.hero-dot {
+    width: 8px; height: 8px; border-radius: 20px;
+    background: rgba(255,255,255,0.35); cursor: pointer;
+    transition: all 0.35s ease; border: none; padding: 0;
+}
+.hero-dot.active { width: 28px; background: #6366f1; box-shadow: 0 0 10px rgba(99,102,241,0.7); }
+.hero-cta-strip {
+    position: relative; z-index: 5;
+    background: rgba(255,255,255,0.04); border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    padding: 14px 24px; flex-wrap: wrap;
+}
+.hero-cta-main {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #10b981, #059669); color: white;
+    font-size: 15px; font-weight: 700; padding: 10px 28px; border-radius: 30px;
+    text-decoration: none; box-shadow: 0 6px 22px rgba(16,185,129,0.4);
+    transition: all 0.3s ease; border: none; cursor: pointer;
+}
+.hero-cta-main:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16,185,129,0.5); }
+.hero-hashtags { font-size: 12px; color: rgba(255,255,255,0.42); letter-spacing: 0.5px; }
+.hero-hashtags span { color: rgba(99,102,241,0.8); font-weight: 600; margin-right: 6px; }
+.hero-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg,#6366f1,#06b6d4,#10b981); width: 0%; z-index: 25; }
+@media (max-width: 768px) {
+    .hero-slide { flex-direction: column; padding: 30px 5% 60px; text-align: center; gap: 24px; min-height: 0; }
+    .hero-img-wrap { width: min(92vw, 460px); order: 1; }
+    .hero-text { order: 2; }
+    .hero-btn-row, .hero-badge-row { justify-content: center; }
+    .hero-desc { margin: 0 auto 20px; }
+    .hero-arrow { display: none; }
+    .hero-dots { bottom: 46px; }
+}
+</style>
+
+<section class="hero-slider-wrap" id="heroSlider">
+    <div class="hero-progress" id="heroProgress"></div>
+
+    <!-- SLIDE 1 — PM KISAN -->
+    <div class="hero-slide active" data-glow="#10b981">
+        <div class="hero-text">
+            <div class="hero-tag">🌾 {% trans "Farmer Welfare" %}</div>
+            <h2 class="hero-title">PM Kisan <span>Samman Nidhi</span></h2>
+            <p class="hero-desc">{% trans "Direct income support of ₹6,000 per year to all eligible farmer families in three equal instalments directly into their bank accounts." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">₹6,000 / Year</span>
+                <span class="hero-badge">All Farmers</span>
+                <span class="hero-badge">Direct Bank Transfer</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?q=PM+Kisan" class="hero-btn primary">Check Eligibility ➜</a>
+                <a href="{% url 'recommend' %}" class="hero-btn outline">AI Recommend</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#10b981,#06b6d4);"></div>
+            <img class="hero-img" src="/static/images/farmer_1.jpg" alt="PM Kisan Farmer"
+                 onerror="this.src='https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=500&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 2 — PM YASASVI -->
+    <div class="hero-slide" data-glow="#6366f1">
+        <div class="hero-text">
+            <div class="hero-tag">🎓 {% trans "Education" %}</div>
+            <h2 class="hero-title">PM <span>YASASVI</span> Scholarship</h2>
+            <p class="hero-desc">{% trans "Merit-based scholarship for OBC, EBC and DNT students in Classes 9–11. Empowering the future through quality education support." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">OBC / EBC Students</span>
+                <span class="hero-badge">Class 9 – 11</span>
+                <span class="hero-badge">Up to ₹15,000</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?q=Scholarship" class="hero-btn primary">{% trans "Know More" %} ➜</a>
+                <a href="{% url 'apply_assistance' %}" class="hero-btn outline">{% trans "Apply Now" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#6366f1,#8b5cf6);"></div>
+            <img class="hero-img" src="/static/images/farmer_2.jpg" alt="YASASVI Scholarship"
+                 onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 3 — PM SURAKSHA BIMA -->
+    <div class="hero-slide" data-glow="#f59e0b">
+        <div class="hero-text">
+            <div class="hero-tag">🛡️ {% trans "Insurance" %}</div>
+            <h2 class="hero-title">PM Suraksha <span>Bima Yojana</span></h2>
+            <p class="hero-desc">{% trans "Accidental insurance cover of ₹2 lakh at just ₹20 per year. Financial protection for families against accidents and permanent disability." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">₹2 Lakh Cover</span>
+                <span class="hero-badge">Only ₹20 / Year</span>
+                <span class="hero-badge">Age 18 – 70</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?q=Bima" class="hero-btn primary">{% trans "Know More" %} ➜</a>
+                <a href="{% url 'recommend' %}" class="hero-btn outline">{% trans "Check Eligibility" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#f59e0b,#ef4444);"></div>
+            <img class="hero-img" src="/static/images/farmer_3.jpg" alt="Suraksha Bima Family"
+                 onerror="this.src='https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 5 — CROP INSURANCE -->
+    <div class="hero-slide" data-glow="#10b981">
+        <div class="hero-text">
+            <div class="hero-tag">🌱 {% trans "Crop Security" %}</div>
+            <h2 class="hero-title">PM Fasal <span>Bima Yojana</span></h2>
+            <p class="hero-desc">{% trans "Affordable crop insurance to protect farmers against yield losses due to natural calamities, pests, and diseases." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">Low Premium</span>
+                <span class="hero-badge">All Seasons</span>
+                <span class="hero-badge">Risk Protection</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?q=Fasal+Bima" class="hero-btn primary">{% trans "Know More" %} ➜</a>
+                <a href="{% url 'recommend' %}" class="hero-btn outline">{% trans "Check Eligibility" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#10b981,#84cc16);"></div>
+            <img class="hero-img" src="/static/images/farmer_5.jpg" alt="Farmer Crop Insurance"
+                 onerror="this.src='https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1200&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 6 — WOMEN FARMER EMPOWERMENT -->
+    <div class="hero-slide" data-glow="#ec4899">
+        <div class="hero-text">
+            <div class="hero-tag">👩‍🌾 {% trans "Inclusion" %}</div>
+            <h2 class="hero-title">{% trans "Women Farmer" %} <span>{% trans "Empowerment" %}</span></h2>
+            <p class="hero-desc">{% trans "Access targeted support schemes for women in agriculture including credit, training, and market linkage assistance." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">Training Support</span>
+                <span class="hero-badge">Credit Access</span>
+                <span class="hero-badge">Market Linkage</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?q=Women+Farmer" class="hero-btn primary">{% trans "Explore Schemes" %} ➜</a>
+                <a href="{% url 'apply_assistance' %}" class="hero-btn outline">{% trans "Apply Now" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#ec4899,#8b5cf6);"></div>
+            <img class="hero-img" src="/static/images/farmer_6.jpg" alt="Women Farmer"
+                 onerror="this.src='https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 7 — DIGITAL AGRI SUPPORT -->
+    <div class="hero-slide" data-glow="#0ea5e9">
+        <div class="hero-text">
+            <div class="hero-tag">🤖 {% trans "Digital Support" %}</div>
+            <h2 class="hero-title">SmartAssist <span>{% trans "AI Guidance" %}</span></h2>
+            <p class="hero-desc">{% trans "Use AI-powered recommendations to identify best-fit schemes and get step-by-step guidance for application and eligibility checks." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">AI Match</span>
+                <span class="hero-badge">Fast Discovery</span>
+                <span class="hero-badge">Easy Apply</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'recommend' %}" class="hero-btn primary">{% trans "Try AI Recommendations" %} ➜</a>
+                <a href="{% url 'scheme_awareness' %}" class="hero-btn outline">{% trans "Browse All Schemes" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#0ea5e9,#22c55e);"></div>
+            <img class="hero-img" src="/static/images/farmer_7.jpg" alt="Digital Agriculture Support"
+                 onerror="this.src='https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=1200&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 8 — AYUSHMAN BHARAT (CENTRAL) -->
+    <div class="hero-slide" data-glow="#14b8a6">
+        <div class="hero-text">
+            <div class="hero-tag">🏛️ {% trans "Central Scheme" %}</div>
+            <h2 class="hero-title">Ayushman Bharat <span>PM-JAY</span></h2>
+            <p class="hero-desc">{% trans "Health assurance scheme providing annual coverage up to ₹5 lakh per family for secondary and tertiary hospitalization." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">₹5 Lakh Health Cover</span>
+                <span class="hero-badge">Eligible Families</span>
+                <span class="hero-badge">Cashless Treatment</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?type=central&q=Ayushman" class="hero-btn primary">{% trans "Explore Central Scheme" %} ➜</a>
+                <a href="{% url 'apply_assistance' %}" class="hero-btn outline">{% trans "Apply Assistance" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#14b8a6,#0ea5e9);"></div>
+            <img class="hero-img" src="/static/images/farmer_5.jpg" alt="Ayushman Bharat Central Scheme"
+                 onerror="this.src='https://images.unsplash.com/photo-1584515933487-779824d29309?w=1200&q=80'">
+        </div>
+    </div>
+
+    <!-- SLIDE 9 — PM AWAS (CENTRAL) -->
+    <div class="hero-slide" data-glow="#f59e0b">
+        <div class="hero-text">
+            <div class="hero-tag">🏛️ {% trans "Central Scheme" %}</div>
+            <h2 class="hero-title">PM Awas Yojana <span>Gramin</span></h2>
+            <p class="hero-desc">{% trans "Housing support for eligible rural families to build pucca houses with basic facilities under the flagship central scheme." %}</p>
+            <div class="hero-badge-row">
+                <span class="hero-badge">Rural Housing</span>
+                <span class="hero-badge">Direct Benefit</span>
+                <span class="hero-badge">Priority Families</span>
+            </div>
+            <div class="hero-btn-row">
+                <a href="{% url 'scheme_awareness' %}?type=central&q=Awas" class="hero-btn primary">{% trans "View Central Schemes" %} ➜</a>
+                <a href="{% url 'recommend' %}" class="hero-btn outline">{% trans "AI Recommend" %}</a>
+            </div>
+        </div>
+        <div class="hero-img-wrap">
+            <div class="hero-img-glow" style="background:radial-gradient(#f59e0b,#ef4444);"></div>
+            <img class="hero-img" src="/static/images/farmer_7.jpg" alt="PM Awas Central Scheme"
+                 onerror="this.src='https://images.unsplash.com/photo-1460317442991-0ec209397118?w=1200&q=80'">
+        </div>
+    </div>
+
+    <!-- ARROWS -->
+    <button class="hero-arrow prev" id="heroPrev" aria-label="Previous slide">&#8592;</button>
+    <button class="hero-arrow next" id="heroNext" aria-label="Next slide">&#8594;</button>
+    <div class="hero-dots" id="heroDots"></div>
+
+    <!-- CTA STRIP -->
+    <div class="hero-cta-strip">
+        <a href="{% url 'recommend' %}" class="hero-cta-main">🔍 {% trans "Find Schemes For You" %}</a>
+        <div class="hero-hashtags">
+            <span>#GovernmentSchemes</span><span>#SchemesForYou</span><span>#SmartAssist</span>
+        </div>
+    </div>
+</section>
+
+<script>
+(function(){
+    const slides   = document.querySelectorAll('.hero-slide');
+    const dotsWrap = document.getElementById('heroDots');
+    const bar      = document.getElementById('heroProgress');
+    const INTERVAL = 4500;
+    let cur = 0, timer = null, progAnim = null;
+
+    slides.forEach((_,i) => {
+        const d = document.createElement('button');
+        d.className = 'hero-dot' + (i===0?' active':'');
+        d.setAttribute('aria-label','Slide '+(i+1));
+        d.onclick = () => goTo(i);
+        dotsWrap.appendChild(d);
+    });
+
+    function goTo(next) {
+        if (next===cur) return;
+        slides[cur].classList.remove('active');
+        slides[cur].classList.add('exit-left');
+        cur = (next+slides.length)%slides.length;
+        slides[cur].classList.remove('enter-right','exit-left');
+        slides[cur].classList.add('active');
+        setTimeout(()=>{ slides.forEach(s=>s.classList.remove('exit-left','enter-right')); }, 750);
+        dotsWrap.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+        resetBar();
+    }
+
+    function advance() { goTo((cur+1)%slides.length); }
+    function back()    { goTo((cur-1+slides.length)%slides.length); }
+
+    function resetBar() {
+        cancelAnimationFrame(progAnim);
+        bar.style.transition='none'; bar.style.width='0%';
+        requestAnimationFrame(()=>{
+            requestAnimationFrame(()=>{
+                bar.style.transition='width '+INTERVAL+'ms linear';
+                bar.style.width='100%';
+            });
+        });
+    }
+
+    function startAuto(){ clearInterval(timer); timer=setInterval(advance,INTERVAL); resetBar(); }
+    function stopAuto() { clearInterval(timer); bar.style.transition='none'; }
+
+    document.getElementById('heroNext').onclick = ()=>{ stopAuto(); advance(); startAuto(); };
+    document.getElementById('heroPrev').onclick = ()=>{ stopAuto(); back();    startAuto(); };
+
+    const sl = document.getElementById('heroSlider');
+    sl.addEventListener('mouseenter', stopAuto);
+    sl.addEventListener('mouseleave', startAuto);
+
+    let tx=0;
+    sl.addEventListener('touchstart', e=>{ tx=e.touches[0].clientX; },{passive:true});
+    sl.addEventListener('touchend',   e=>{
+        const dx=e.changedTouches[0].clientX-tx;
+        if(Math.abs(dx)>50){ stopAuto(); dx<0?advance():back(); startAuto(); }
+    });
+
+    startAuto();
+})();
+</script>
+<!-- ═══════════════════════════════ /HERO SLIDER ═══════════════════════════════ -->
 
 <!-- MAIN CONTAINER -->
 <div class="container">
 
     <!-- KPI CARDS -->
     <div class="kpi-section">
-        <div class="kpi-card primary">
-            <div class="kpi-label">📊 Total Schemes Available</div>
-            <div class="kpi-value">{{ total_schemes }}</div>
-        </div>
+        <a href="{% url 'scheme_awareness' %}" class="kpi-link">
+            <div class="kpi-card primary clickable">
+                <span class="kpi-icon">📊</span>
+                <div class="kpi-label">{% trans "Total Schemes Available" %}</div>
+                <div class="kpi-value" data-target="{{ total_schemes }}">0</div>
+            </div>
+        </a>
 
-        <div class="kpi-card success">
-            <div class="kpi-label">🏛️ Central Schemes</div>
-            <div class="kpi-value">{{ central_schemes }}</div>
-        </div>
+        <a href="{% url 'scheme_awareness' %}?type=central" class="kpi-link">
+            <div class="kpi-card success clickable">
+                <span class="kpi-icon">🏛️</span>
+                <div class="kpi-label">{% trans "Central Schemes" %}</div>
+                <div class="kpi-value" data-target="{{ central_schemes }}">0</div>
+            </div>
+        </a>
 
-        <div class="kpi-card info">
-            <div class="kpi-label">🏢 State Schemes</div>
-            <div class="kpi-value">{{ state_schemes }}</div>
-        </div>
-
-        <div class="kpi-card primary">
-            <div class="kpi-label">📝 Your Applications</div>
-            <div class="kpi-value">{{ user_applications }}</div>
-        </div>
-
-        <div class="kpi-card success">
-            <div class="kpi-label">✅ Approved</div>
-            <div class="kpi-value">{{ user_approved }}</div>
-        </div>
+        <a href="{% url 'scheme_awareness' %}?type=state" class="kpi-link">
+            <div class="kpi-card info clickable">
+                <span class="kpi-icon">🏢</span>
+                <div class="kpi-label">{% trans "State Schemes" %}</div>
+                <div class="kpi-value" data-target="{{ state_schemes }}">0</div>
+            </div>
+        </a>
 
         <div class="kpi-card warning">
-            <div class="kpi-label">⏳ Total Applications</div>
-            <div class="kpi-value">{{ total_applications }}</div>
+            <span class="kpi-icon">📝</span>
+            <div class="kpi-label">{% trans "Your Applications" %}</div>
+            <div class="kpi-value" data-target="{{ user_applications }}">0</div>
+        </div>
+
+        <div class="kpi-card success">
+            <span class="kpi-icon">✅</span>
+            <div class="kpi-label">{% trans "Approved" %}</div>
+            <div class="kpi-value" data-target="{{ user_approved }}">0</div>
+        </div>
+
+        <div class="kpi-card purple">
+            <span class="kpi-icon">⏳</span>
+            <div class="kpi-label">{% trans "Total Applications" %}</div>
+            <div class="kpi-value" data-target="{{ total_applications }}">0</div>
         </div>
     </div>
 
     <!-- SCHEME STATISTICS -->
     <div class="scheme-stats">
-        <h3>💡 Scheme Overview</h3>
+        <h3>💡 {% trans "Scheme Overview" %}</h3>
         <div class="stat-grid">
-            <div class="stat-item">
-                <div class="stat-number">{{ central_schemes }}</div>
-                <div class="stat-label">Central Government Schemes</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">{{ state_schemes }}</div>
-                <div class="stat-label">State Government Schemes</div>
-            </div>
+            <a href="{% url 'scheme_awareness' %}?type=central" class="stat-link">
+                <div class="stat-item">
+                    <div class="stat-number">{{ central_schemes }}</div>
+                    <div class="stat-label">{% trans "Central Government Schemes" %}</div>
+                </div>
+            </a>
+            <a href="{% url 'scheme_awareness' %}?type=state" class="stat-link">
+                <div class="stat-item">
+                    <div class="stat-number">{{ state_schemes }}</div>
+                    <div class="stat-label">{% trans "State Government Schemes" %}</div>
+                </div>
+            </a>
             <div class="stat-item">
                 <div class="stat-number">{{ approved_apps }}</div>
                 <div class="stat-label">✅ Approved Applications</div>
@@ -842,16 +1737,16 @@
         <div class="section-header">
             <div class="header-content">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_India.svg/320px-Flag_of_India.svg.png" alt="Government of India" class="gov-logo">
-                <h3>🏛️ State-wise Agricultural Schemes Distribution</h3>
+                <h3>🏛️ {% trans "State-wise Agricultural Schemes Distribution" %}</h3>
             </div>
             <div class="header-actions">
                 <select id="sortSelect" class="sort-select">
-                    <option value="schemes-desc">Most Schemes First</option>
-                    <option value="schemes-asc">Least Schemes First</option>
-                    <option value="name-asc">Name A-Z</option>
-                    <option value="name-desc">Name Z-A</option>
+                    <option value="schemes-desc">{% trans "Most Schemes First" %}</option>
+                    <option value="schemes-asc">{% trans "Least Schemes First" %}</option>
+                    <option value="name-asc">{% trans "Name A-Z" %}</option>
+                    <option value="name-desc">{% trans "Name Z-A" %}</option>
                 </select>
-                <input type="text" id="stateSearch" placeholder="🔍 Search states..." class="search-input">
+                <input type="text" id="stateSearch" placeholder="🔍 {% trans 'Search states...' %}" class="search-input">
                 <div class="header-stats">
                     <span class="total-states">{{ schemes_by_state|length }}/36 States/UTs Covered</span>
                 </div>
@@ -861,20 +1756,20 @@
         <div class="state-summary">
             <div class="summary-stats">
                 <div class="summary-item">
-                    <span class="summary-label">🇮🇳 Total Schemes:</span>
+                    <span class="summary-label">🇮🇳 {% trans "Total Schemes" %}:</span>
                     <span class="summary-value">{{ total_schemes }}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">📍 Most Schemes:</span>
+                    <span class="summary-label">📍 {% trans "Most Schemes" %}:</span>
                     <span class="summary-value">{{ schemes_by_state.0.state }} ({{ schemes_by_state.0.count }})</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">📊 Average per State:</span>
+                    <span class="summary-label">📊 {% trans "Average per State" %}:</span>
                     <span class="summary-value">{{ avg_per_state }}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">🎯 Coverage:</span>
-                    <span class="summary-value">100% All India</span>
+                    <span class="summary-label">🎯 {% trans "Coverage" %}:</span>
+                    <span class="summary-value">{% trans "100% All India" %}</span>
                 </div>
             </div>
         </div>
@@ -886,7 +1781,7 @@
                     <div class="state-flag">{{ state.state|slice:":2" }}</div>
                     <div class="state-info">
                         <div class="state-name">{{ state.state }}</div>
-                        <div class="state-scheme-count">{{ state.count }} schemes</div>
+                        <div class="state-scheme-count">{{ state.count }} {% trans "schemes" %}</div>
                     </div>
                 </div>
                 <div class="state-progress">
@@ -897,7 +1792,7 @@
                 </div>
                 <div class="state-actions">
                     <button class="action-btn" data-state="{{ state.state }}">
-                        📋 View Schemes
+                        📋 {% trans "View Schemes" %}
                     </button>
                 </div>
             </div>
@@ -906,11 +1801,11 @@
 
         <div id="state-scheme-details" class="state-details-panel" style="display:none;">
             <div class="panel-header">
-                <h4 id="detail-state-name">Selected State Schemes</h4>
+                <h4 id="detail-state-name">{% trans "Selected State Schemes" %}</h4>
                 <button class="close-btn" id="close-state-scheme-panel">✕</button>
             </div>
             <div id="state-scheme-list" class="state-scheme-list">
-                <p>Loading schemes...</p>
+                <p>{% trans "Loading schemes..." %}</p>
             </div>
         </div>
     </div>
@@ -918,42 +1813,42 @@
     <!-- CHARTS -->
     <div class="charts-section">
         <div class="chart-card">
-            <h3>📊 Application Status Distribution</h3>
+            <h3>📊 {% trans "Application Status Distribution" %}</h3>
             <canvas id="statusChart"></canvas>
         </div>
 
         <div class="chart-card">
-            <h3>🏘️ Applications by State</h3>
+            <h3>🏘️ {% trans "Applications by State" %}</h3>
             <canvas id="stateChart"></canvas>
         </div>
 
         <div class="chart-card">
-            <h3>🏛️ Schemes by Department</h3>
+            <h3>🏛️ {% trans "Schemes by Department" %}</h3>
             <canvas id="deptChart"></canvas>
         </div>
 
         <div class="chart-card">
-            <h3>📍 Schemes by State</h3>
+            <h3>📍 {% trans "Schemes by State" %}</h3>
             <canvas id="schemeStateChart"></canvas>
         </div>
 
         <div class="chart-card">
-            <h3>📈 State Scheme Trend (Line Chart)</h3>
+            <h3>📈 {% trans "State Scheme Trend (Line Chart)" %}</h3>
             <canvas id="schemeTrendChart"></canvas>
         </div>
     </div>
 
     <!-- RECENT APPLICATIONS -->
     <div class="recent-apps">
-        <h3>📋 Recent Applications</h3>
+        <h3>📋 {% trans "Recent Applications" %}</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Applicant Name</th>
-                    <th>Scheme</th>
-                    <th>State</th>
-                    <th>Status</th>
-                    <th>Applied Date</th>
+                    <th>{% trans "Applicant Name" %}</th>
+                    <th>{% trans "Scheme" %}</th>
+                    <th>{% trans "State" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Applied Date" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -971,7 +1866,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align:center; color:#6c757d;">No applications yet</td>
+                    <td colspan="5" style="text-align:center; color:#6c757d;">{% trans "No applications yet" %}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -982,22 +1877,22 @@
 
 <!-- FOOTER -->
 <div class="footer">
-    <p>🇮🇳 SmartAssist - Agricultural Schemes Portal | Government of India | All Rights Reserved</p>
+    <p>🇮🇳 {% trans "SmartAssist - Agricultural Schemes Portal | Government of India | All Rights Reserved" %}</p>
 </div>
 
 <!-- MODAL FOR STATE DETAILS -->
 <div id="stateModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">State Details</h3>
+            <h3 id="modalTitle">{% trans "State Details" %}</h3>
             <span class="close-btn" onclick="closeModal()">&times;</span>
         </div>
         <div class="modal-body" id="modalBody">
             <!-- Content will be populated by JavaScript -->
         </div>
         <div class="modal-footer">
-            <button class="modal-btn primary" onclick="closeModal()">Close</button>
-            <button class="modal-btn secondary" onclick="viewAllSchemes()">View All Schemes</button>
+            <button class="modal-btn primary" onclick="closeModal()">{% trans "Close" %}</button>
+            <button class="modal-btn secondary" onclick="viewAllSchemes()">{% trans "View All Schemes" %}</button>
         </div>
     </div>
 </div>
@@ -1357,6 +2252,18 @@
         });
     });
 
+    document.querySelectorAll('.kpi-card.clickable, .stat-link .stat-item').forEach(card => {
+        card.addEventListener('mousedown', function() {
+            this.style.transform = 'translateY(-2px) scale(0.99)';
+        });
+        card.addEventListener('mouseup', function() {
+            this.style.transform = '';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+
     // Search functionality
     document.getElementById('stateSearch').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
@@ -1414,6 +2321,32 @@
             stateGrid.appendChild(card);
         });
     });
+
+    // Animated number counter
+    function animateCounter(el) {
+        const target = parseInt(el.getAttribute('data-target')) || 0;
+        const duration = 1400;
+        const start = performance.now();
+        const update = (time) => {
+            const elapsed = time - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            el.textContent = Math.round(eased * target);
+            if (progress < 1) requestAnimationFrame(update);
+        };
+        requestAnimationFrame(update);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.4 });
+
+    document.querySelectorAll('.kpi-value[data-target]').forEach(el => counterObserver.observe(el));
 
     console.log('Dashboard data loaded successfully');
     console.log('Status:', statusData);

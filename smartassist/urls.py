@@ -9,11 +9,20 @@ from farmers.views import (
     apply_scheme,
     my_applications,
     chatbot,
+    chatbot_stream,
+    transcribe_voice,
     schemes_by_state_api,
+    state_schemes_public_api,
+    india_map_overview_api,
+    india_map_state_analytics_api,
+    india_map_schemes,
+    state_dashboard,
     register,
     profile,
     home,
     scheme_awareness,
+    scheme_detail,
+    tts_proxy,
     apply_for_assistance,
     application_status,
     admin_dashboard,
@@ -21,7 +30,8 @@ from farmers.views import (
     update_application_status,
     apply_scheme_admin,
     reports,
-    set_language
+    set_language,
+    logout_user
 )
 
 urlpatterns = [
@@ -38,6 +48,7 @@ urlpatterns += i18n_patterns(
 
     # Citizen Pages
     path('schemes/', scheme_awareness, name='scheme_awareness'),
+    path('schemes/<int:scheme_id>/', scheme_detail, name='scheme_detail'),
     path('apply/', apply_for_assistance, name='apply_assistance'),
     path('status/', application_status, name='application_status'),
 
@@ -52,7 +63,7 @@ urlpatterns += i18n_patterns(
 
     # Auth
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', logout_user, name='logout'),
     path('register/', register, name='register'),
     path('profile/', profile, name='profile'),
 
@@ -71,9 +82,17 @@ urlpatterns += i18n_patterns(
 
     # ✅ CHATBOT (IMPORTANT)
     path('chatbot/', chatbot, name='chatbot'),
+    path('chatbot/stream/', chatbot_stream, name='chatbot_stream'),
+    path('voice-transcribe/', transcribe_voice, name='voice_transcribe'),
 
     # API endpoints
     path('api/state-schemes/<str:state_name>/', schemes_by_state_api, name='state_schemes_api'),
+    path('api/schemes/<str:state_name>/', state_schemes_public_api, name='schemes_api'),
+    path('api/india-map/overview/', india_map_overview_api, name='india_map_overview_api'),
+    path('api/india-map/state/<str:state_name>/', india_map_state_analytics_api, name='india_map_state_analytics_api'),
+    path('india-map/', india_map_schemes, name='india_map_schemes'),
+    path('tts-proxy/', tts_proxy, name='tts_proxy'),
+    path('state-dashboard/<str:state_name>/', state_dashboard, name='state_dashboard'),
 
     prefix_default_language=False
 )

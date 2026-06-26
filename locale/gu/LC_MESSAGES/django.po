@@ -1,0 +1,87 @@
+# Django translation file for gu
+msgid ""
+msgstr ""
+"Project-Id-Version: SmartAssist 1.0\n"
+"Language: gu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Home"
+msgstr "હોમ"
+
+msgid "Schemes"
+msgstr "યોજનાઓ"
+
+msgid "Apply"
+msgstr "અરજી કરો"
+
+msgid "My Status"
+msgstr "મારી સ્થિતિ"
+
+msgid "Dashboard"
+msgstr "ડૅશબોર્ડ"
+
+msgid "Admin Dashboard"
+msgstr "એડમિન ડૅશબોર્ડ"
+
+msgid "Manage Schemes"
+msgstr "યોજના વ્યવસ્થાપન"
+
+msgid "Reports"
+msgstr "અહેવાલ"
+
+msgid "Profile"
+msgstr "પ્રોફાઇલ"
+
+msgid "Logout"
+msgstr "લૉગ આઉટ"
+
+msgid "Login"
+msgstr "લૉગ ઇન"
+
+msgid "Register"
+msgstr "નોંધણી"
+
+msgid "Inclusive Digital Platform for Government Welfare Schemes"
+msgstr "સરકારી કલ્યાણ યોજનાઓ માટે સર્વસમાવેશક ડિજિટલ પ્લેટફૉર્મ"
+
+msgid "Empowering citizens through digital inclusion"
+msgstr "ડિજિટલ સમાવેશ દ્વારા નાગરિકોને સશક્ત બનાવવું"
+
+msgid "Contact"
+msgstr "સંપર્ક"
+
+msgid "All rights reserved."
+msgstr "તમામ હક્ક સુરક્ષિત."
+
+msgid "Get Started"
+msgstr "શરૂ કરો"
+
+msgid "View Schemes"
+msgstr "યોજનાઓ જુઓ"
+
+msgid "How It Works"
+msgstr "તે કેવી રીતે કામ કરે છે"
+
+msgid "1. Register"
+msgstr "1. નોંધણી કરો"
+
+msgid "2. Get Assistance"
+msgstr "2. સહાય મેળવો"
+
+msgid "3. Track & Receive"
+msgstr "3. ટ્રૅક કરો અને મેળવો"
+
+msgid "Our Mission"
+msgstr "અમારું ધ્યેય"
+
+msgid "Citizens Helped"
+msgstr "મદદ કરેલ નાગરિકો"
+
+msgid "Volunteers"
+msgstr "સ્વયંસેવકો"
+
+msgid "Create Account"
+msgstr "ખાતું બનાવો"
+

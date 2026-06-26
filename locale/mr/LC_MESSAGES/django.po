@@ -1,0 +1,226 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: smartassist\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-29 00:00+0000\n"
+"PO-Revision-Date: 2026-03-29 00:00+0000\n"
+"Last-Translator: GitHub Copilot\n"
+"Language-Team: Marathi\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Home"
+msgstr "मुख्यपृष्ठ"
+
+msgid "Schemes"
+msgstr "योजना"
+
+msgid "Apply"
+msgstr "अर्ज करा"
+
+msgid "My Status"
+msgstr "माझी स्थिती"
+
+msgid "Dashboard"
+msgstr "डॅशबोर्ड"
+
+msgid "Admin Dashboard"
+msgstr "प्रशासक डॅशबोर्ड"
+
+msgid "Manage Schemes"
+msgstr "योजना व्यवस्थापन"
+
+msgid "Reports"
+msgstr "अहवाल"
+
+msgid "Profile"
+msgstr "प्रोफाइल"
+
+msgid "Logout"
+msgstr "बाहेर पडा"
+
+msgid "Login"
+msgstr "लॉगिन"
+
+msgid "Register"
+msgstr "नोंदणी"
+
+msgid "Inclusive Digital Platform for Government Welfare Schemes"
+msgstr "शासकीय कल्याणकारी योजनांसाठी समावेशक डिजिटल व्यासपीठ"
+
+msgid "Empowering citizens through digital inclusion"
+msgstr "डिजिटल समावेशनाद्वारे नागरिकांना सक्षम बनवत आहोत"
+
+msgid "Contact"
+msgstr "संपर्क"
+
+msgid "All rights reserved."
+msgstr "सर्व हक्क राखीव."
+
+msgid "SmartAssist - Inclusive Government Scheme Platform"
+msgstr "स्मार्टअसिस्ट - समावेशक शासकीय योजना व्यासपीठ"
+
+msgid "Empowering Citizens Through Digital Inclusion"
+msgstr "डिजिटल समावेशनाद्वारे नागरिकांना सक्षम बनवत आहोत"
+
+msgid "SmartAssist bridges the digital divide by connecting citizens with government welfare schemes through dedicated volunteers and administrators."
+msgstr "स्मार्टअसिस्ट समर्पित स्वयंसेवक आणि प्रशासकांच्या मदतीने नागरिकांना शासकीय कल्याणकारी योजनांशी जोडून डिजिटल दरी कमी करते."
+
+msgid "Get Started"
+msgstr "सुरुवात करा"
+
+msgid "View Schemes"
+msgstr "योजना पाहा"
+
+msgid "How It Works"
+msgstr "हे कसे कार्य करते"
+
+msgid "Simple steps to access government welfare schemes"
+msgstr "शासकीय कल्याणकारी योजनांपर्यंत पोहोचण्यासाठी सोप्या पायऱ्या"
+
+msgid "1. Register"
+msgstr "1. नोंदणी करा"
+
+msgid "Create your account with basic details. No complex forms required."
+msgstr "मूलभूत माहितीसह आपले खाते तयार करा. अवघड फॉर्मची गरज नाही."
+
+msgid "2. Get Assistance"
+msgstr "2. सहाय्य मिळवा"
+
+msgid "Our volunteers review your details and apply for suitable schemes on your behalf."
+msgstr "आमचे स्वयंसेवक आपली माहिती तपासतात आणि आपल्या वतीने योग्य योजनांसाठी अर्ज करतात."
+
+msgid "3. Track & Receive"
+msgstr "3. मागोवा घ्या आणि लाभ मिळवा"
+
+msgid "Track your application status and receive benefits when approved."
+msgstr "आपल्या अर्जाची स्थिती पाहा आणि मंजुरीनंतर लाभ मिळवा."
+
+msgid "SDG Impact"
+msgstr "एसडीजी प्रभाव"
+
+msgid "Our Mission"
+msgstr "आमचे ध्येय"
+
+msgid "To create an inclusive digital ecosystem where every citizen, regardless of literacy level or digital skills, can access government welfare schemes and contribute to community development."
+msgstr "साक्षरता पातळी किंवा डिजिटल कौशल्य काहीही असो, प्रत्येक नागरिकाला शासकीय कल्याणकारी योजनांचा लाभ घेता येईल आणि समुदाय विकासात योगदान देता येईल असे समावेशक डिजिटल परिसंस्था निर्माण करणे हे आमचे ध्येय आहे."
+
+msgid "Citizens Helped"
+msgstr "मदत मिळालेले नागरिक"
+
+msgid "Volunteers"
+msgstr "स्वयंसेवक"
+
+msgid "Community Awareness Initiative"
+msgstr "समुदाय जनजागृती उपक्रम"
+
+msgid "After receiving benefits, please inform your family members, friends, and neighbors about government schemes. Together, we can build an aware and empowered community!"
+msgstr "लाभ मिळाल्यानंतर कृपया आपल्या कुटुंबीयांना, मित्रांना आणि शेजाऱ्यांना शासकीय योजनांविषयी माहिती द्या. आपण सर्व मिळून जागरूक आणि सक्षम समाज उभारू शकतो!"
+
+msgid "Login - SmartAssist"
+msgstr "लॉगिन - स्मार्टअसिस्ट"
+
+msgid "Invalid username or password. Please check your credentials."
+msgstr "अवैध वापरकर्तानाव किंवा संकेतशब्द. कृपया आपली माहिती तपासा."
+
+msgid "Don't have an account?"
+msgstr "आपले खाते नाही का?"
+
+msgid "Register here"
+msgstr "येथे नोंदणी करा"
+
+msgid "Register - SmartAssist"
+msgstr "नोंदणी - स्मार्टअसिस्ट"
+
+msgid "Create Account"
+msgstr "खाते तयार करा"
+
+msgid "Already have an account?"
+msgstr "आधीपासून खाते आहे का?"
+
+msgid "Login here"
+msgstr "येथे लॉगिन करा"
+
+msgid "SmartAssist - AI-Powered Agriculture Scheme Platform"
+msgstr "स्मार्टअसिस्ट - एआय-आधारित कृषी योजना व्यासपीठ"
+
+msgid "AI-Powered"
+msgstr "एआय-आधारित"
+
+msgid "Government Scheme Platform"
+msgstr "शासकीय योजना व्यासपीठ"
+
+msgid "Explore Schemes"
+msgstr "योजना शोधा"
+
+msgid "Live Platform Highlights"
+msgstr "लाईव्ह प्लॅटफॉर्म वैशिष्ट्ये"
+
+msgid "Find Central and State Schemes Quickly"
+msgstr "केंद्र व राज्य योजना पटकन शोधा"
+
+msgid "AI-based recommendations for better matching"
+msgstr "अधिक अचूक जुळणीसाठी एआय-आधारित शिफारसी"
+
+msgid "Volunteer-assisted application support"
+msgstr "स्वयंसेवक-सहाय्यित अर्ज मदत"
+
+msgid "Mobile-friendly and multilingual access"
+msgstr "मोबाईलसाठी अनुकूल व बहुभाषिक प्रवेश"
+
+msgid "States Covered"
+msgstr "समाविष्ट राज्ये"
+
+msgid "Smart Matching"
+msgstr "स्मार्ट जुळणी"
+
+msgid "Online Access"
+msgstr "ऑनलाइन प्रवेश"
+
+msgid "No Poverty"
+msgstr "दारिद्र्य निर्मूलन"
+
+msgid "Quality Education"
+msgstr "गुणवत्तापूर्ण शिक्षण"
+
+msgid "Gender Equality"
+msgstr "लैंगिक समानता"
+
+msgid "Partnerships"
+msgstr "भागीदारी"
+
+msgid "AI-powered platform to discover government schemes easily"
+msgstr "शासकीय योजना सहज शोधण्यासाठी एआय-आधारित व्यासपीठ"
+
+msgid "Quick Links"
+msgstr "जलद दुवे"
+
+msgid "About Us"
+msgstr "आमच्याबद्दल"
+
+msgid "Contact Us"
+msgstr "आमच्याशी संपर्क"
+
+msgid "Accessibility"
+msgstr "सुलभता"
+
+msgid "FAQ"
+msgstr "वारंवार विचारले जाणारे प्रश्न"
+
+msgid "Terms & Conditions"
+msgstr "अटी व शर्ती"
+
+msgid "Disclaimer"
+msgstr "अस्वीकरण"
+
+msgid "Useful Links"
+msgstr "उपयुक्त दुवे"
+
+msgid "Digital India"
+msgstr "डिजिटल इंडिया"
+
+msgid "Version"
+msgstr "आवृत्ती"

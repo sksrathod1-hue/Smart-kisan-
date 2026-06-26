@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -138,6 +139,13 @@ USE_I18N = True
 
 USE_L10N = True
 
+# Language and localization settings
+LANGUAGE_COOKIE_NAME = 'django_language'
+LANGUAGE_COOKIE_AGE = 365 * 24 * 60 * 60  # 1 year
+LANGUAGE_COOKIE_PATH = '/'
+LANGUAGE_COOKIE_HTTPONLY = False
+LANGUAGE_SESSION_KEY = '_language'
+
 TIME_ZONE = 'Asia/Kolkata'
 
 
@@ -146,24 +154,36 @@ TIME_ZONE = 'Asia/Kolkata'
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 
 
 
-# Email settings for notifications
+# ─── EMAIL SETTINGS ────────────────────────────────────────────────────────────
+# How to enable real Gmail sending:
+#   1. Go to https://myaccount.google.com/apppasswords
+#   2. Create an App Password for "Mail"
+#   3. Run these two commands in your terminal:
+#        export EMAIL_HOST_USER="yourgmail@gmail.com"
+#        export EMAIL_HOST_PASSWORD="xxxx xxxx xxxx xxxx"
+#   (Or add them permanently to your ~/.bashrc or a .env file)
+#
+# The on-screen reset button always works even without email configured.
+# When real credentials are set, the link ALSO arrives in the user's inbox.
+# ────────────────────────────────────────────────────────────────────────────────
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@gmail.com'  # Replace with your Gmail
-EMAIL_HOST_PASSWORD = 'your-app-password'  # Replace with Gmail app password
-DEFAULT_FROM_EMAIL = 'SmartAssist <your-email@gmail.com>'
-
-# For development, you can use console backend:
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')        # set via environment variable
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '') # set via environment variable
+DEFAULT_FROM_EMAIL = f'SmartAssist <{EMAIL_HOST_USER}>' if EMAIL_HOST_USER else 'SmartAssist <noreply@smartassist.gov.in>'
 
 
 
