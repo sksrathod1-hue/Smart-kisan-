@@ -19,7 +19,17 @@ build/
 *.log
 db.sqlite3*
 /media/
-/static/
+
+# Keep static assets in version control
+/static/*
+!/static/
+!/static/css/
+!/static/css/**
+!/static/js/
+!/static/js/**
+!/static/images/
+!/static/images/**
+!/static/india_states.geojson
 
 # IDE
 .vscode/
